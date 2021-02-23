@@ -29,9 +29,10 @@ export function Countdown() {
     return setActive(true);
   }
 
-  function stopCountdown() {
+  function resetCountdown() {
     clearTimeout(timeout);
-    return setActive(false);
+    setActive(false);
+    return setTime(25 * 60);
   }
 
   return (
@@ -49,7 +50,7 @@ export function Countdown() {
       </CountdownContainer>
 
       {active ? (
-        <StopCountdownButton type="button" onClick={stopCountdown}>
+        <StopCountdownButton type="button" onClick={resetCountdown}>
           Abandonar ciclo
         </StopCountdownButton>
       ) : (
