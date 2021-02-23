@@ -4,17 +4,17 @@ import { Header } from './styles';
 import { ProgressBarContainer, ProgressBar, CurrentExperience } from './styles';
 
 export function ExperienceBar() {
-  const [level, setLevel] = useState(90);
+  const [xpCount, setXpCount] = useState(20);
 
   return (
     <Header>
-      <span>0 xp</span>
+      <span>{xpCount} xp</span>
       <ProgressBarContainer>
-        <ProgressBar level={level} />
+        <ProgressBar xpCount={xpCount} />
         <CurrentExperience
-          level={level}
+          xpCount={xpCount}
         >
-          {level} xp
+          {xpCount} xp
         </CurrentExperience>
       </ProgressBarContainer>
       <span>600 xp</span>
