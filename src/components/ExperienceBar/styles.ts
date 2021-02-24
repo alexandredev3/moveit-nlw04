@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface ProgressBarProps {
-  xpCount: number;
+  percentToNextLevel: number;
 }
 
 export const Header = styled.header`
@@ -23,7 +23,7 @@ export const ProgressBarContainer = styled.div`
 `;
 
 export const ProgressBar = styled.div<ProgressBarProps>`
-  width: ${({ xpCount }) => xpCount}%;
+  width: ${({ percentToNextLevel }) => percentToNextLevel}%;
   height: 4px;
   border-radius: 4px;
   background: var(--green);
@@ -32,11 +32,13 @@ export const ProgressBar = styled.div<ProgressBarProps>`
 export const CurrentExperience = styled.div<ProgressBarProps>`
   position: absolute;
   top: 12px;
-  left: ${({ xpCount }) => xpCount}%;
+
+  left: ${({ percentToNextLevel }) => percentToNextLevel}%;
 
   /**
     como o nosso left for 50%, entao se for colocado -50% no translateX tirando esse 50% do left,
     o elemento vai ficar no centro.
   */
-  transform: ${({ xpCount }) => `translateX(-${xpCount}%)`};
+  transform: ${({ percentToNextLevel }) =>
+    `translateX(-${percentToNextLevel}%)`};
 `;

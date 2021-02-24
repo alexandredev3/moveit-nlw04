@@ -1,23 +1,26 @@
 import { useState } from 'react';
+import { useChallenge } from '../../contexts/ChallengeContext';
 import { Header } from './styles';
 
 import { ProgressBarContainer, ProgressBar, CurrentExperience } from './styles';
 
 export function ExperienceBar() {
-  const [xpCount, setXpCount] = useState(20);
+  const { currentExperience, experienceToNextLevel } = useChallenge(); 
+
+  const percentToNextLevel = Math.round((currentExperience * 100) / experienceToNextLevel)
 
   return (
     <Header>
-      <span>{xpCount} xp</span>
+      <span>0 xp</span>
       <ProgressBarContainer>
-        <ProgressBar xpCount={xpCount} />
+        <ProgressBar percentToNextLevel={percentToNextLevel} />
         <CurrentExperience
-          xpCount={xpCount}
+          percentToNextLevel={percentToNextLevel}
         >
-          {xpCount} xp
+          {currentExperience} xp
         </CurrentExperience>
       </ProgressBarContainer>
-      <span>600 xp</span>
+      <span>{experienceToNextLevel} xp</span>
     </Header>
   );
 }

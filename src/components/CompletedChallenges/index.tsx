@@ -1,12 +1,15 @@
 import React from 'react';
+import { useChallenge } from '../../contexts/ChallengeContext';
 
 import { CompletedChallengesContainer } from './styles';
 
 export function CompletedChallenges() {
+  const { challengesCompleted } = useChallenge()
+
   return (
     <CompletedChallengesContainer>
       <span>Desafios completos</span>
-      <span>99999999+</span>
+      <span>{challengesCompleted}</span>
     </CompletedChallengesContainer>
   );
 }

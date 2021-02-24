@@ -1,4 +1,8 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
+interface Props {
+  active: boolean;
+}
 
 export const CountdownContainer = styled.div`
   display: flex;
@@ -39,7 +43,7 @@ export const CountdownContainer = styled.div`
   }
 `;
 
-export const StopCountdownButton = styled.button`
+export const CountdownButton = styled.button<Props>`
   width: 100%;
   height: 5rem;
 
@@ -48,45 +52,58 @@ export const StopCountdownButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 
   border: 0;
   border-radius: 5px;
-
-  color: var(--text);
 
   font-size: 1.25rem;
   font-weight: 600;
 
   transition: background-color 0.2s;
 
-  &:hover {
-    color: var(--white);
-    background: var(--red);
+  &:disabled {
+    background: var(--white);
+    color: var(--text);
+    cursor: not-allowed;
+
+    /* border-bottom: 4px solid var(--green);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0; */
+
+    &::after {
+      position: relative;
+      top: 26px;
+
+      content: "";
+
+      width: 100%;
+      height: 4px;
+
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      background: var(--green);
+    }
   }
-`;
 
-export const StartCountdownButton = styled.button`
-  width: 100%;
-  height: 5rem;
+  ${({ active }) =>
+    active
+      ? css`
+          color: var(--title);
+          background: var(--white);
 
-  margin-top: 2rem;
+          &:hover:not(:disabled) {
+            color: var(--white);
+            background: var(--red);
+          }
+        `
+      : css`
+          color: var(--white);
+          background: var(--blue);
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 0;
-  border-radius: 5px;
-
-  color: var(--white);
-  background: var(--blue);
-
-  font-size: 1.25rem;
-  font-weight: 600;
-
-  transition: background-color 0.2s;
-
-  &:hover {
-    background: var(--blue-dark);
-  }
+          &:hover:not(:disabled) {
+            background: var(--blue-dark);
+          }
+        `}
 `;
