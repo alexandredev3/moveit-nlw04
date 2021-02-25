@@ -1,5 +1,6 @@
 import React from 'react';
 import { useChallenge } from '../../contexts/ChallengeContext';
+import { useCountdown } from '../../contexts/CountdownContext';
 
 import { 
   ChallengeBoxContainer,
@@ -14,6 +15,19 @@ import {
 
 export function ChallengeBox() {
   const { activeChallenge, resetChallenge, completeChallenge } = useChallenge();
+  const { resetCountdown } = useCountdown();
+
+  function handleChallengeSucceeded() {
+    new Audio('/success-bell.wav').play();
+
+    completeChallenge();
+    resetCountdown();
+  }
+
+  function handleChallengeFailed() {
+    resetChallenge();
+    resetCountdown();
+  }
 
   return (
     <ChallengeBoxContainer>
@@ -32,13 +46,13 @@ export function ChallengeBox() {
           <Footer>
             <ChallengeFailedButton
               type="button"
-              onClick={resetChallenge}
+              onClick={handleChallengeFailed}
             >
               Falhei
             </ChallengeFailedButton>
             <ChallengeSucceededButton
               type="button"
-              onClick={completeChallenge}
+              onClick={handleChallengeSucceeded}
             >
               Completei
             </ChallengeSucceededButton>
