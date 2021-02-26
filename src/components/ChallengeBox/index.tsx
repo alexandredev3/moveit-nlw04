@@ -1,4 +1,3 @@
-import React from 'react';
 import { useChallenge } from '../../contexts/ChallengeContext';
 import { useCountdown } from '../../contexts/CountdownContext';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useCountdown } from '../../contexts/CountdownContext';
 
 import { CountdownContainer, CountdownButton } from './styles';

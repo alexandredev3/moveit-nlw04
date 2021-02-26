@@ -1,7 +1,8 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 
 import challenges from '../../challenges.json';
-import { useCountdown } from './CountdownContext';
+import { LevelUpModal } from '../components/LevelUpModal';
 
 interface IChallenge {
   type: 'body' | 'eye' | string;
@@ -19,19 +20,24 @@ interface IChallengeContextData {
   startNewChallenge: () => void; 
   resetChallenge: () => void;
   completeChallenge: () => void;
+  closeLevelUpModal: () => void;
 }
 
 interface IChallengeProviderProps {
   children: ReactNode;
+  level: number;
+  currentExperience: number;
+  challengesCompleted: number;
 }
 
 export const ChallengeContext = createContext<IChallengeContextData>({} as IChallengeContextData);
 
-export function ChallengeProvider({ children }: IChallengeProviderProps) {
-  const [level, setLevel] = useState(1);
-  const [currentExperience, setCurrentExperience] = useState(0);
-  const [challengesCompleted, setChallengesCompleted] = useState(0);
+export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps) {
+  const [level, setLevel] = useState(rest.level ?? 1);
+  const [currentExperience, setCurrentExperience] = useState(rest.currentExperience ?? 0);
+  const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted ?? 0);
   const [activeChallenge, setActiveChallenge] = useState<IChallenge | null>(null);
+  const [isLevelUpModalOpen, setIsModalLevelUpOpen] = useState(false);
 
   // pow calculo de potencia.
   // 4 e o fator de experiencia, mude esse valor se voce quiser deixar mais facil ou dificil
@@ -45,8 +51,23 @@ export function ChallengeProvider({ children }: IChallengeProviderProps) {
     Notification.requestPermission();
   }, []);
 
+  useEffect(() => {
+    Cookies.set('level', String(level));
+    Cookies.set('currentExperience', String(currentExperience));
+    Cookies.set('challengesCompleted', String(challengesCompleted));
+  }, [level, currentExperience, challengesCompleted]);
+
+  const closeLevelUpModal = useCallback(() => {
+    if (!setIsModalLevelUpOpen) {
+      return;
+    }
+
+    setIsModalLevelUpOpen(false);
+  }, []);
+
   const levelUp = useCallback(() => {
-    setLevel(level + 1)
+    setLevel(level + 1);
+    setIsModalLevelUpOpen(true);
   }, [level]);
 
   const startNewChallenge = useCallback(() => {
@@ -102,10 +123,13 @@ export function ChallengeProvider({ children }: IChallengeProviderProps) {
           startNewChallenge, 
           resetChallenge,
           completeChallenge,
+          closeLevelUpModal,
         }
     }
     >
       {children}
+
+      { isLevelUpModalOpen && <LevelUpModal /> }
     </ChallengeContext.Provider>
   );
 }

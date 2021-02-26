@@ -11,7 +11,7 @@ export function ExperienceBar() {
 
   return (
     <Header>
-      <span>0 xp</span>
+      <span>{currentExperience} xp</span>
       <ProgressBarContainer>
         <ProgressBar percentToNextLevel={percentToNextLevel} />
         <CurrentExperience
