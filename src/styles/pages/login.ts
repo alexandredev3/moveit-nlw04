@@ -8,7 +8,13 @@ export const Container = styled.div`
 
   background: var(--blue);
 
-  @media (max-width: 1336px) {
+  @media (max-width: 1080px) {
+    > img {
+      width: calc(768px - 142px);
+    }
+  }
+
+  @media (max-width: 720px) {
     > img {
       display: none;
     }
@@ -21,20 +27,15 @@ export const Section = styled.section`
 
   margin-right: 16.25rem;
 
-  @media (max-width: 1500px) {
+  @media (max-width: 1080px) {
     margin-right: 7.25rem;
   }
 
-  @media (max-width: 1336px) {
+  @media (max-width: 720px) {
     margin: 0 auto;
-    margin-right: 0;
-    /*
-      mexer no padding do mobile
-    */
-    /* padding: 2rem; */
 
     > img {
-      width: calc(100% - 2rem);
+      width: calc(100% - 24px);
     }
   }
 `;
@@ -48,12 +49,6 @@ export const Form = styled.form`
     font-size: 3.6rem;
     color: var(--white);
     margin-bottom: 2.4rem;
-  }
-
-  @media (max-width: 1336px) {
-    > h1 {
-      font-size: 2.6rem;
-    }
   }
 `;
 
@@ -69,14 +64,6 @@ export const Github = styled.div`
 
     margin-left: 1.5rem;
     width: 254px;
-  }
-
-  @media (max-width: 1336px) {
-    > span {
-      font-size: 1rem;
-      line-height: 1.32rem;
-      margin-left: 1.2rem;
-    }
   }
 `;
 
@@ -103,7 +90,7 @@ export const InputBlock = styled.div`
     background: linear-gradient(90deg, #4953b8 0%, rgba(73, 83, 184, 0.2) 100%);
   }
 
-  @media (max-width: 1336px) {
+  @media (max-width: 720px) {
     > input {
       height: 70px;
 
@@ -149,7 +136,7 @@ export const Button = styled.button`
     filter: brightness(0.9);
   }
 
-  @media (max-width: 1336px) {
+  @media (max-width: 720px) {
     height: 70px;
     padding: 0 1.6rem;
   }
