@@ -28,19 +28,6 @@ export const Footer = styled.footer`
 
   width: 32px;
   height: 32px;
-
-  > div {
-    position: relative;
-    top: 50%;
-    left: -194%;
-
-    border: 2px solid var(--blue);
-    background: var(--blue);
-    border-radius: 2px;
-    width: 52px;
-
-    transform: rotate(-90deg);
-  }
 `;
 
 export const HomeButton = styled.button`
@@ -51,6 +38,19 @@ export const HomeButton = styled.button`
   background: transparent;
 
   font-size: 0;
+
+  .home__selected {
+    position: relative;
+    top: 50%;
+    left: -208%;
+
+    background: var(--blue);
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    width: 58px;
+
+    transform: rotate(-90deg);
+  }
 `;
 
 export const LeaderboardButton = styled.button`
@@ -61,4 +61,17 @@ export const LeaderboardButton = styled.button`
   background: transparent;
 
   font-size: 0;
+
+  .leaderboard__selected {
+    position: relative;
+    top: 50%;
+    left: -208%;
+
+    background: var(--blue);
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    width: 58px;
+
+    transform: rotate(-90deg);
+  }
 `;
