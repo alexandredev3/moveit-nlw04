@@ -1,16 +1,25 @@
 import React from 'react';
-import { useChallenge } from '../../contexts/ChallengeContext';
 
 import { ProfileContainer } from './styles';
 
-export function Profile() {
+import { useChallenge } from '../../contexts/ChallengeContext';
+
+interface Props {
+  name: string;
+  imgUrl: string;
+}
+
+export function Profile({
+  name,
+  imgUrl
+}: Props) {
   const { level } = useChallenge();
 
   return (
-    <ProfileContainer>
-      <img src="https://github.com/alexandredev3.png" alt="Alexandre Costa"/>
+    <ProfileContainer className="profile__container">
+      <img src={imgUrl} alt={`${name} Avatar`} />
       <div>
-        <strong>Alexandre Costa</strong>
+        <strong>{name}</strong>
         <p>
           <img src="icons/level.svg" alt="Level icon"/>
           Level {level}

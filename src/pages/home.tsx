@@ -6,11 +6,11 @@ import { ExperienceBar } from '../components/ExperienceBar'
 import { Profile } from '../components/Profile';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
+import { Sidebar } from '../components/Sidebar';
 
 import { ContainerHome, Container, Section } from '../styles/pages/app';
 import { CountdownProvider } from '../contexts/CountdownContext';
 import { ChallengeProvider } from '../contexts/ChallengeContext';
-import { Sidebar } from '../components/Sidebar';
 
 interface IHomeProps {
   level: number;
@@ -38,7 +38,10 @@ export default function Home({ level, challengesCompleted, currentExperience }: 
           <CountdownProvider>
             <Section>
               <div>
-                <Profile />
+                <Profile 
+                  name="Alexandre"
+                  imgUrl="https://github.com/alexandredev3.png"
+                />
                 <CompletedChallenges />
                 <Countdown />
               </div>

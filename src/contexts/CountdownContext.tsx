@@ -23,7 +23,7 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
   const { startNewChallenge } = useChallenge(); 
 
   // 25 minutos representado em segundos.
-  const startTime = 25 * 60
+  const startTime = 0.1 * 60
 
   const [time, setTime] = useState(startTime);
   const [isActive, setIsActive] = useState(false);
