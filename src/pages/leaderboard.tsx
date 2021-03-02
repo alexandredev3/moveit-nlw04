@@ -13,7 +13,7 @@ import { UserLeaderboard } from '../components/UserLeaderboard';
 export default function Leaderboard() {
   return (
     <ContainerLeaderboard>
-      <Sidebar />
+      <Sidebar page="leaderboard" />
       <Container>
           <Head>
             <title>Leaderboard | move.it</title>

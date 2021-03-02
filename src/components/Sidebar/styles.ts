@@ -1,5 +1,15 @@
 import styled from "styled-components";
 
+const buttonHover = `
+  border: 2px solid var(--blue);
+  background: var(--blue);
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+  width: 58px;
+
+  transform: rotate(-90deg);
+`;
+
 export const Aside = styled.aside`
   display: flex;
   flex-direction: column;
@@ -30,6 +40,26 @@ export const Footer = styled.footer`
   height: 32px;
 `;
 
+export const ButtonContainer = styled.div`
+  position: relative;
+`;
+
+export const HomeButtonHover = styled.div`
+  position: absolute;
+  top: 10%;
+  left: -208%;
+
+  ${buttonHover}
+`;
+
+export const LeaderboardButtonHover = styled.div`
+  position: absolute;
+  top: 60%;
+  left: -208%;
+
+  ${buttonHover}
+`;
+
 export const HomeButton = styled.button`
   outline: 1px solid var(--white);
 
@@ -38,19 +68,6 @@ export const HomeButton = styled.button`
   background: transparent;
 
   font-size: 0;
-
-  .home__selected {
-    position: relative;
-    top: 50%;
-    left: -208%;
-
-    background: var(--blue);
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
-    width: 58px;
-
-    transform: rotate(-90deg);
-  }
 `;
 
 export const LeaderboardButton = styled.button`
@@ -61,17 +78,4 @@ export const LeaderboardButton = styled.button`
   background: transparent;
 
   font-size: 0;
-
-  .leaderboard__selected {
-    position: relative;
-    top: 50%;
-    left: -208%;
-
-    background: var(--blue);
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
-    width: 58px;
-
-    transform: rotate(-90deg);
-  }
 `;

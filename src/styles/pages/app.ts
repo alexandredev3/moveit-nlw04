@@ -8,10 +8,6 @@ export const ContainerHome = styled.div`
       stroke: var(--blue);
     }
   }
-
-  .home__selected {
-    border: 2px solid var(--blue);
-  }
 `;
 
 export const Container = styled.div`

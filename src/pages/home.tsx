@@ -22,7 +22,7 @@ export default function Home({ level, challengesCompleted, currentExperience }: 
 
   return (
     <ContainerHome>
-      <Sidebar />
+      <Sidebar page="home" />
       <ChallengeProvider
         level={level}
         currentExperience={currentExperience}
