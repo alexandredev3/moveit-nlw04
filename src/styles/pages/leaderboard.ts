@@ -24,66 +24,56 @@ export const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+`;
 
+export const Header = styled.header`
   > h1 {
     color: var(--title);
   }
 `;
-
-export const Header = styled.header``;
 
 export const Main = styled.main`
   font-size: 1rem;
 
   width: 100%;
   margin-top: 2.5rem;
+  margin-left: -1.4rem;
 `;
 
-export const RowsContainer = styled.div`
-  text-transform: uppercase;
-  color: var(--text);
-  font-weight: bold;
-  opacity: 0.5;
+export const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
 
-  #position__row {
-    margin-right: 2.2rem;
+  thead {
+    text-align: left;
+    text-transform: uppercase;
+    color: var(--text);
+    font-weight: bold;
+    opacity: 0.5;
+
+    .position__head {
+      text-align: center;
+    }
   }
 
-  #user__row {
-    margin-right: 29rem;
-  }
+  tbody {
+    font-weight: 500;
 
-  #challenges__row {
-    margin-right: 7.4rem;
-  }
-`;
+    tr td > strong {
+      color: var(--blue);
+    }
 
-export const UserInfoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 1.5rem;
+    .position__body {
+      text-align: center;
 
-  font-weight: 500;
+      font-weight: 500;
+      font-size: 1.5rem;
+    }
 
-  strong {
-    color: var(--blue);
-  }
-
-  #position {
-    margin: 0 1.8rem;
-
-    font-size: 1.5rem;
-  }
-
-  #user {
-    margin-left: 2.8rem;
-  }
-
-  #challenges {
-    margin-left: 17.2rem;
-  }
-
-  #experience {
-    margin-left: 4rem;
+    &:before {
+      content: "";
+      display: block;
+      margin-top: 2.5rem;
+    }
   }
 `;
