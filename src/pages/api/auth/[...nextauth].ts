@@ -30,7 +30,7 @@ export default NextAuth({
   database: MONGODB_URI,
   secret: SECRET,
 
-  debug: true,
+  debug: false,
 
   callbacks: {
     async signIn(user: any, account: IAccount, profile: any) {

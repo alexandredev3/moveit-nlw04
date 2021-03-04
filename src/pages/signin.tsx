@@ -1,4 +1,6 @@
+import { GetServerSideProps } from 'next';
 import { signIn } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 
 import { 
   Container,
@@ -9,7 +11,7 @@ import {
   Button,
 } from '../styles/pages/signin';
 
-function SignIn() {
+export default function SignIn() {
   return (
     <Container>
       <img src="/icons/simbolo.svg" alt="Simbolo icon"/>
@@ -33,4 +35,19 @@ function SignIn() {
   );
 }
 
-export default SignIn
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+
+  return {
+    props: {}
+  }
+}

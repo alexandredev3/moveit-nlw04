@@ -28,7 +28,7 @@ export const Aside = styled.aside`
   }
 `;
 
-export const Footer = styled.footer`
+export const Main = styled.footer`
   position: absolute;
   top: 50%;
 
@@ -78,4 +78,17 @@ export const LeaderboardButton = styled.button`
   background: transparent;
 
   font-size: 0;
+`;
+
+export const Footer = styled.footer`
+  button {
+    border: 0;
+    background: transparent;
+
+    font-size: 0;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
 `;

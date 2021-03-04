@@ -1,13 +1,15 @@
 import Link from 'next/link';
+import { useSession, signOut } from 'next-auth/client';
 
 import {
   Aside,
-  Footer,
+  Main,
   HomeButton,
   LeaderboardButton,
   ButtonContainer,
   HomeButtonHover,
-  LeaderboardButtonHover
+  LeaderboardButtonHover,
+  Footer
 } from './styles';
 
 interface Props {
@@ -15,13 +17,16 @@ interface Props {
 }
 
 export function Sidebar({ page }: Props) {
+  const [session, loading] = useSession();
+  const isSignin = session && !loading;
+
   return (
     <Aside>
       <img src="/logo.svg" alt="Moveit logo"/>
 
-      <Footer>
+      <Main>
         <ButtonContainer>
-          <Link href="/home">
+          <Link href="/">
             <HomeButton className="home__button">
             {page === 'home' && <HomeButtonHover />}
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,6 +45,21 @@ export function Sidebar({ page }: Props) {
             </LeaderboardButton>
           </Link>
         </ButtonContainer>
+      </Main>
+
+      <Footer>
+        {
+          isSignin && (
+            <button
+              type="button"
+              onClick={() => signOut({
+                redirect: true
+              })}
+            >
+              <img src="/icons/logout.svg" alt="SignOut Icon"/>
+            </button>
+          ) 
+        }
       </Footer>
     </Aside>
   );
