@@ -119,6 +119,7 @@ export const InputBlock = styled.div`
 export const Button = styled.button`
   display: flex;
   align-items: center;
+  justify-content: center;
 
   height: 80px;
   padding: 0 1.8rem;
@@ -126,11 +127,12 @@ export const Button = styled.button`
   background: var(--blue-dark);
 
   border: 0;
-  border-bottom-right-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 5px;
   outline: 1px solid var(--blue);
 
   transition: filter 0.2s;
+
+  font-size: 0;
 
   &:hover {
     filter: brightness(0.9);

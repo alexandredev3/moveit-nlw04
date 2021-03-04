@@ -1,32 +1,90 @@
-import { 
-  Container,
-  Section,
-  Form,
-  Github,
-  InputBlock,
-  Button,
-} from '../styles/pages/login';
+import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import { getSession, useSession } from 'next-auth/client';
 
-export default function Login() {
+import { CompletedChallenges } from '../components/CompletedChallenges';
+import { ExperienceBar } from '../components/ExperienceBar'
+import { Profile } from '../components/Profile';
+import { Countdown } from '../components/Countdown';
+import { ChallengeBox } from '../components/ChallengeBox';
+import { Sidebar } from '../components/Sidebar';
+
+import { ContainerHome, Container, Section } from '../styles/pages/app';
+import { CountdownProvider } from '../contexts/CountdownContext';
+import { ChallengeProvider } from '../contexts/ChallengeContext';
+
+interface ISession {
+  user: {
+    name: string;
+    image: string;
+  };
+  accessToken: string;
+  expires: Date;
+}
+
+interface IHomeProps {
+  level: number;
+  currentExperience: number;
+  challengesCompleted: number;
+  session: ISession | null;
+}
+
+function Home({ 
+  level, 
+  challengesCompleted, 
+  currentExperience, 
+  session 
+}: IHomeProps) {
   return (
-    <Container>
-      <img src="/icons/simbolo.svg" alt="Simbolo icon"/>
-      <Section>
-        <img src="/logo-full.svg" alt="Full logo"/>
-        <Form>
-          <h1>Bem-vindo</h1>
-          <Github>
-            <img src="/icons/github.svg" alt="Github logo"/>
-            <span>Faça login com seu Github para começar</span>
-          </Github>
-          <InputBlock>
-            <input type="text" placeholder="Digite seu username"/>
-            <Button type="button">
-              <img src="/icons/arrow-right.svg" alt="Seta para esquerta icon"/>
-            </Button>
-          </InputBlock>
-        </Form>
-      </Section>
-    </Container>
-  );
-} 
+    <ContainerHome>
+      <Sidebar page="home" />
+      <ChallengeProvider
+        level={level}
+        currentExperience={currentExperience}
+        challengesCompleted={challengesCompleted}
+      >
+        <Container>
+          <Head>
+            <title>Inicio | move.it</title>
+          </Head>
+
+          <ExperienceBar />
+
+          <CountdownProvider>
+            <Section>
+              <div>
+                <Profile 
+                  name={session.user.name}
+                  imgUrl={session.user.image}
+                />
+                <CompletedChallenges />
+                <Countdown />
+              </div>
+              <div>
+                <ChallengeBox />
+              </div>
+            </Section>
+          </CountdownProvider>
+        </Container>
+      </ChallengeProvider>
+    </ContainerHome>
+  )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req } = context;
+  // todos os cookies da nossa aplicação.
+  const { level, currentExperience, challengesCompleted } = req.cookies;
+  const session = await getSession(context);
+
+  return {
+    props: {
+      level: Number(level ?? 1),
+      currentExperience: Number(currentExperience ?? 0),
+      challengesCompleted: Number(challengesCompleted ?? 0),
+      session: session ?? null,
+    }
+  }
+}
+
+export default Home;
