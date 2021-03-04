@@ -67,24 +67,24 @@ export const CountdownButton = styled.button<Props>`
     color: var(--text);
     cursor: not-allowed;
 
-    /* border-bottom: 4px solid var(--green);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0; */
-
     &::after {
       position: relative;
       top: 26px;
 
       content: "";
 
-      width: 100%;
       height: 4px;
+      width: 100%;
 
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
 
       background: var(--green);
     }
+
+    /* border-bottom: 4px solid var(--green);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0; */
   }
 
   ${({ active }) =>

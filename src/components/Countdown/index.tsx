@@ -9,6 +9,7 @@ export function Countdown() {
     seconds, 
     hasTimeFinished, 
     isActive, 
+    startTime,
     resetCountdown, 
     startCountdown 
   } = useCountdown();

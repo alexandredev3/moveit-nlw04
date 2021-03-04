@@ -24,8 +24,8 @@ export default function SignIn() {
             <span>Faça login com seu Github para começar</span>
           </Github>
           <InputBlock>
-            {/* <input type="text" placeholder="Digite seu username"/> */}
             <Button type="button" onClick={() => signIn('github')}>
+              <span>Fazer login com Github</span>
               <img src="/icons/github.svg" alt="Seta para esquerta icon"/>
             </Button>
           </InputBlock>

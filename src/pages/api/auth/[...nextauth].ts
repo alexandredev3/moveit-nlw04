@@ -1,7 +1,6 @@
-import { ObjectId } from "mongodb";
-import NextAuth from "next-auth";
+import NextAuth, { InitOptions } from "next-auth";
 import Providers from "next-auth/providers";
-import { connectToDatabase } from "../_lib/mongodb";
+import { NowRequest, NowResponse } from "@vercel/node";
 
 interface IAccount {
   userId: string;
@@ -18,8 +17,7 @@ const {
   SECRET,
 } = process.env;
 
-//@ts-ignore
-export default NextAuth({
+const options: InitOptions = {
   providers: [
     Providers.GitHub({
       clientId: GITHUB_CLIENT_ID,
@@ -30,7 +28,7 @@ export default NextAuth({
   database: MONGODB_URI,
   secret: SECRET,
 
-  debug: false,
+  debug: true,
 
   callbacks: {
     async signIn(user: any, account: IAccount, profile: any) {
@@ -40,20 +38,15 @@ export default NextAuth({
       return baseUrl;
     },
     async session(session: any, user: any) {
+      session.user = user;
+
       return session;
     },
-    async jwt(
-      token: any,
-      user: any,
-      account: any,
-      profile: any,
-      isNewUser: boolean
-    ) {
-      if (account?.accessToken) {
-        token.accessToken = account.accessToken;
-      }
-
+    async jwt(token: any, profile: any) {
       return token;
     },
   },
-});
+};
+
+export default (req: NowRequest, res: NowResponse) =>
+  NextAuth(req, res, options);

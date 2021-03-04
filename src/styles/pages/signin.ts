@@ -22,6 +22,9 @@ export const Container = styled.div`
 `;
 
 export const Section = styled.section`
+  width: 100%;
+  max-width: 400px;
+
   display: flex;
   flex-direction: column;
 
@@ -89,57 +92,35 @@ export const InputBlock = styled.div`
 
     background: linear-gradient(90deg, #4953b8 0%, rgba(73, 83, 184, 0.2) 100%);
   }
-
-  @media (max-width: 720px) {
-    > input {
-      height: 70px;
-
-      padding: 0 1.6rem;
-      border: 0;
-      border-radius: 5px;
-      outline: 1px solid var(--blue);
-
-      font-size: 1.08rem;
-      color: var(--white);
-
-      &::placeholder {
-        font-size: 1.08rem;
-        color: var(--text-highlight);
-      }
-
-      background: linear-gradient(
-        90deg,
-        #4953b8 0%,
-        rgba(73, 83, 184, 0.2) 100%
-      );
-    }
-  }
 `;
 
 export const Button = styled.button`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
+  width: 100%;
   height: 80px;
   padding: 0 1.8rem;
 
-  background: var(--blue-dark);
+  background: linear-gradient(90deg, #4953b8 0%, rgba(73, 83, 184, 0.2) 100%);
 
   border: 0;
   border-radius: 5px;
   outline: 1px solid var(--blue);
 
-  transition: filter 0.2s;
-
-  font-size: 0;
-
-  &:hover {
-    filter: brightness(0.9);
-  }
+  transition: background 0.2s;
 
   @media (max-width: 720px) {
     height: 70px;
     padding: 0 1.6rem;
+  }
+
+  span {
+    display: flex;
+
+    color: var(--text-highlight);
+
+    font-size: 1.4rem;
   }
 `;

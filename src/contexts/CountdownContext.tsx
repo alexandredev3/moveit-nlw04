@@ -7,6 +7,7 @@ interface ICountdownContextData {
   seconds: number;
   hasTimeFinished: boolean;
   isActive: boolean;
+  startTime: number;
   startCountdown: () => void;
   resetCountdown: () => void;
 }
@@ -65,6 +66,7 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
           seconds,
           hasTimeFinished,
           isActive,
+          startTime,
           startCountdown,
           resetCountdown,
         }

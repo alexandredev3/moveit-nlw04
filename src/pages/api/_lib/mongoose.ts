@@ -1,4 +1,5 @@
-import { MongoClient, MongoClientOptions } from "mongodb";
+import { NowRequest, NowResponse } from "@vercel/node";
+import mongoose from "mongoose";
 
 const { MONGODB_URI, MONGODB_DB } = process.env;
 
@@ -23,27 +24,22 @@ if (!cached) {
   };
 }
 
-export async function connectToDatabase() {
+export const connectToDatabase = (handler: any) => async (
+  req: NowRequest,
+  res: NowResponse
+) => {
   if (cached.conn) {
-    return cached.conn;
+    return handler(req, res);
   }
 
   if (!cached.promise) {
-    const options: MongoClientOptions = {
+    cached.promise = mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    };
-
-    cached.promise = await MongoClient.connect(MONGODB_URI, options).then(
-      (client) => {
-        return {
-          client,
-          db: client.db(MONGODB_DB),
-        };
-      }
-    );
+      useCreateIndex: true,
+    });
   }
 
   cached.conn = await cached.promise;
-  return cached.conn;
-}
+  return handler(req, res);
+};
