@@ -30,33 +30,32 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
     });
   }
 
-  if (!client.isConnected()) {
-    return res.status(500).json("Internel Error Server");
-  }
+  if (client.isConnected()) {
+    const usersCollection = db.collection("users");
+    const countdownCollection = db.collection("countdowns");
 
-  const usersCollection = db.collection("users");
-  const countdownCollection = db.collection("countdowns");
+    const user = await usersCollection.findOne({
+      _id: new ObjectId(id),
+    });
 
-  const user = await usersCollection.findOne({
-    _id: new ObjectId(id),
-  });
+    if (!user) {
+      return res.status(400).json({
+        error: "User does not exists",
+      });
+    }
 
-  if (!user) {
-    return res.status(400).json({
-      error: "User does not exists",
+    const countdown = await countdownCollection.insertOne({
+      time: dateToNumber,
+      user: id,
+      isInvalid: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return res.status(200).json({
+      countdown: countdown.ops,
     });
   }
-
-  const countdown = await countdownCollection.insertOne({
-    time: dateToNumber,
-    user: id,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
-
-  return res.status(200).json({
-    countdown: countdown.ops,
-  });
 }
 
 export default initialCountdown;
