@@ -2,7 +2,7 @@ import { NowRequest, NowResponse } from "@vercel/node";
 import { isValid } from "date-fns";
 import { getSession } from "next-auth/client";
 
-import { connectToDatabase } from "@lib/mongoose";
+import { connectToDatabase } from "@lib/mongodb";
 import { ObjectId } from "mongodb";
 
 interface ISession {
