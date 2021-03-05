@@ -2,9 +2,8 @@ import { NowRequest, NowResponse } from "@vercel/node";
 import { isValid } from "date-fns";
 import { getSession } from "next-auth/client";
 
-import { connectToDatabase } from "../_lib/mongoose";
-import User from "../_lib/schemas/User";
-import Countdown from "../_lib/schemas/Countdown";
+import { connectToDatabase } from "@lib/mongoose";
+import { ObjectId } from "mongodb";
 
 interface ISession {
   user: {
@@ -23,6 +22,7 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
   const dateToNumber = Number(date);
   const session = ((await getSession({ req })) as unknown) as ISession;
   const { id } = session.user;
+  const { client, db } = await connectToDatabase();
 
   if (!isValid(dateToNumber)) {
     return res.status(400).json({
@@ -30,7 +30,16 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
     });
   }
 
-  const user = await User.findById(id);
+  if (!client.isConnected()) {
+    return res.status(500).json("Internel Error Server");
+  }
+
+  const usersCollection = db.collection("users");
+  const countdownCollection = db.collection("countdowns");
+
+  const user = await usersCollection.findOne({
+    _id: new ObjectId(id),
+  });
 
   if (!user) {
     return res.status(400).json({
@@ -38,14 +47,16 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
     });
   }
 
-  const countdown = await Countdown.create({
+  const countdown = await countdownCollection.insertOne({
     time: dateToNumber,
     user: id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
 
-  await countdown.save();
-
-  return res.status(200).json(countdown);
+  return res.status(200).json({
+    countdown: countdown.ops,
+  });
 }
 
-export default connectToDatabase(initialCountdown);
+export default initialCountdown;

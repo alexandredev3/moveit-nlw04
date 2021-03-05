@@ -1,5 +1,4 @@
-import { NowRequest, NowResponse } from "@vercel/node";
-import mongoose from "mongoose";
+import { MongoClient, MongoClientOptions } from "mongodb";
 
 const { MONGODB_URI, MONGODB_DB } = process.env;
 
@@ -13,33 +12,31 @@ if (!MONGODB_URI) {
   );
 }
 
-// @ts-ignore
-let cached: global.mongo;
+let cachedClient: any;
+let cachedDb: any;
 
-if (!cached) {
-  // @ts-ignore
-  cached = global.mongo = {
-    conn: null,
-    promise: null,
+export async function connectToDatabase() {
+  if (cachedClient && cachedDb) {
+    return {
+      cachedClient,
+      cachedDb,
+    };
+  }
+
+  const options: MongoClientOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  };
+
+  const client = await MongoClient.connect(MONGODB_URI, options);
+
+  const db = await client.db(MONGODB_DB);
+
+  cachedClient = client;
+  cachedDb = db;
+
+  return {
+    client,
+    db,
   };
 }
-
-export const connectToDatabase = (handler: any) => async (
-  req: NowRequest,
-  res: NowResponse
-) => {
-  if (cached.conn) {
-    return handler(req, res);
-  }
-
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    });
-  }
-
-  cached.conn = await cached.promise;
-  return handler(req, res);
-};
