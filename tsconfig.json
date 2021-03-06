@@ -19,7 +19,8 @@
     "jsx": "preserve",
     "baseUrl": "./src",
     "paths": {
-      "@lib/*": ["./pages/api/_lib/*"]
+      "@lib/*": ["./pages/api/_lib/*"],
+      "@/*": ["../*"]
     }
   },
   "include": [

@@ -22,7 +22,7 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
   const dateToNumber = Number(date);
   const session = ((await getSession({ req })) as unknown) as ISession;
   const { id } = session.user;
-  const { client, db } = await connectToDatabase();
+  const { db } = await connectToDatabase();
 
   if (!isValid(dateToNumber)) {
     return res.status(400).json({
@@ -30,32 +30,30 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
     });
   }
 
-  if (client.isConnected()) {
-    const usersCollection = db.collection("users");
-    const countdownCollection = db.collection("countdowns");
+  const usersCollection = db.collection("users");
+  const countdownCyclesCollection = db.collection("countdown_cycles");
 
-    const user = await usersCollection.findOne({
-      _id: new ObjectId(id),
-    });
+  const user = await usersCollection.findOne({
+    _id: new ObjectId(id),
+  });
 
-    if (!user) {
-      return res.status(400).json({
-        error: "User does not exists",
-      });
-    }
-
-    const countdown = await countdownCollection.insertOne({
-      time: dateToNumber,
-      user: id,
-      isInvalid: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-
-    return res.status(200).json({
-      countdown: countdown.ops,
+  if (!user) {
+    return res.status(400).json({
+      error: "User does not exists",
     });
   }
+
+  const countdown = await countdownCyclesCollection.insertOne({
+    endingTime: dateToNumber,
+    user: id,
+    isInvalid: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  return res.status(200).json({
+    countdown: countdown.ops,
+  });
 }
 
 export default initialCountdown;

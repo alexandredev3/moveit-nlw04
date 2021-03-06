@@ -12,31 +12,38 @@ if (!MONGODB_URI) {
   );
 }
 
-let cachedClient: any;
-let cachedDb: any;
+// @ts-ignore
+let cached = global.mongo;
+
+if (!cached) {
+  // @ts-ignore
+  cached = global.mongo = {
+    conn: null,
+    promise: null,
+  };
+}
 
 export async function connectToDatabase() {
-  if (cachedClient && cachedDb) {
-    return {
-      cachedClient,
-      cachedDb,
-    };
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  const options: MongoClientOptions = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  };
+  if (!cached.promise) {
+    const options: MongoClientOptions = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    };
 
-  const client = await MongoClient.connect(MONGODB_URI, options);
+    cached.promise = MongoClient.connect(MONGODB_URI, options).then(
+      (client) => {
+        return {
+          client,
+          db: client.db(MONGODB_DB),
+        };
+      }
+    );
+  }
 
-  const db = await client.db(MONGODB_DB);
-
-  cachedClient = client;
-  cachedDb = db;
-
-  return {
-    client,
-    db,
-  };
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
