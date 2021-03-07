@@ -7,18 +7,6 @@ import { connectToDatabase } from "@lib/mongodb";
 import challenges from "@/challenges.json";
 import { calculateChallenges } from "@lib/calculateChallenges";
 
-interface ISession {
-  user: {
-    id: string;
-    name: string;
-    image: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-  accessToken: string;
-  expires: Date;
-}
-
 interface ActiveChallenge {
   type: "body" | "eye";
   amount: number;
@@ -29,7 +17,7 @@ interface ActiveChallenge {
 export default async function challenge(req: NowRequest, res: NowResponse) {
   const cycleId = req.query.cycleId as string;
   const challengeIndex = req.query.challengeIndex as string;
-  const { user } = ((await getSession({ req })) as unknown) as ISession;
+  const { user } = await getSession({ req });
   const { db } = await connectToDatabase();
 
   /**
@@ -90,53 +78,46 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
     const createdAt = challenge ? challenge.createdAt : new Date();
     const updatedAt = new Date();
 
-    const { value } = await challengesCollection.findOneAndUpdate(
-      {
-        user: user.id,
-      },
-      {
-        $set: {
-          level,
-          challengesCompleted,
-          currentExperience,
-          experienceToNextLevel,
-          createdAt,
-          updatedAt,
-        },
-      },
-      {
-        upsert: true,
-      }
-    );
+    const query = {
+      user: user.id,
+    };
 
-    await countdownCollection.findOneAndUpdate(
-      {
-        _id: new ObjectId(cycleId),
+    const update = {
+      $set: {
+        level,
+        challengesCompleted,
+        currentExperience,
+        experienceToNextLevel,
+        createdAt,
+        updatedAt,
       },
-      {
-        $set: {
-          isInvalid: true,
-        },
-      }
-    );
+    };
 
-    if (!value) {
-      return res.status(200).json({
-        challenge: {
-          _id: new ObjectId(),
-          challengesCompleted,
-          experienceToNextLevel,
-          level,
-          currentExperience,
-          user: user.id,
-          createdAt,
-          updatedAt,
-        },
-      });
-    }
+    const options = {
+      returnNewDocument: true,
+      upsert: true,
+      new: true,
+    };
+
+    await challengesCollection.updateOne(query, update, options);
+
+    const challengeCompleted = await challengesCollection.findOne({
+      user: user.id,
+    });
+
+    // await countdownCollection.updateOne(
+    //   {
+    //     _id: new ObjectId(cycleId),
+    //   },
+    //   {
+    //     $set: {
+    //       isInvalid: true,
+    //     },
+    //   }
+    // );
 
     return res.status(200).json({
-      challenge: value,
+      challenge: challengeCompleted,
     });
   } catch (err) {
     console.log(err);
