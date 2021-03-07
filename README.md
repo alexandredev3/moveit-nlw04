@@ -1,3 +1,3 @@
 <h1 align="center"> 
-	🚧  MoveIt App 🚀 Em construção...  🚧
+	🚧  MoveIt Versão 2.0 🚀 Em construção...  🚧
 </h1>
