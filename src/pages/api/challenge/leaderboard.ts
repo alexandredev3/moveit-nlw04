@@ -8,11 +8,14 @@ export default async function leaderboard(req: NowRequest, res: NowResponse) {
   const challengesCollection = db.collection("challenges");
 
   /**
-   * Fazer um filtro para colocar quem fez mais desafios nos primeiros indexes do array.
+   * filtro para colocar quem fez mais desafios nos primeiros indexes do array leaderboard.
    */
 
   try {
-    const challengesCursor = await challengesCollection.find();
+    const challengesCursor = await challengesCollection.find().sort({
+      level: -1,
+      challengesCompleted: -1,
+    });
     const leaderboard: any[] = [];
 
     await challengesCursor.forEach(async (doc) => leaderboard.push(doc));

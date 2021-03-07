@@ -106,16 +106,16 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
 
     await challengesCollection.updateOne(query, update, options);
 
-    // await countdownCollection.updateOne(
-    //   {
-    //     _id: new ObjectId(cycleId),
-    //   },
-    //   {
-    //     $set: {
-    //       isInvalid: true,
-    //     },
-    //   }
-    // );
+    await countdownCollection.updateOne(
+      {
+        _id: new ObjectId(cycleId),
+      },
+      {
+        $set: {
+          isInvalid: true,
+        },
+      }
+    );
 
     const challengeCompleted = await challengesCollection.findOne(query);
 
