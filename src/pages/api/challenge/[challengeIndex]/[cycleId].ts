@@ -61,9 +61,13 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
       });
     }
 
-    const challenge = await challengesCollection.findOne({
-      user: user.id,
-    });
+    const query = {
+      $where: () => {
+        this.user.id === user.id;
+      },
+    };
+
+    const challenge = await challengesCollection.findOne(query);
 
     const {
       challengesCompleted,
@@ -78,12 +82,13 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
     const createdAt = challenge ? challenge.createdAt : new Date();
     const updatedAt = new Date();
 
-    const query = {
-      user: user.id,
-    };
-
     const update = {
       $set: {
+        user: {
+          id: user.id,
+          name: user.name,
+          avatar: user.image,
+        },
         level,
         challengesCompleted,
         currentExperience,
@@ -101,10 +106,6 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
 
     await challengesCollection.updateOne(query, update, options);
 
-    const challengeCompleted = await challengesCollection.findOne({
-      user: user.id,
-    });
-
     // await countdownCollection.updateOne(
     //   {
     //     _id: new ObjectId(cycleId),
@@ -115,6 +116,8 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
     //     },
     //   }
     // );
+
+    const challengeCompleted = await challengesCollection.findOne(query);
 
     return res.status(200).json({
       challenge: challengeCompleted,
