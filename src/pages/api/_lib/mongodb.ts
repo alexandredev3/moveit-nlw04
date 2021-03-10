@@ -12,11 +12,9 @@ if (!MONGODB_URI) {
   );
 }
 
-// @ts-ignore
 let cached = global.mongo;
 
 if (!cached) {
-  // @ts-ignore
   cached = global.mongo = {
     conn: null,
     promise: null,

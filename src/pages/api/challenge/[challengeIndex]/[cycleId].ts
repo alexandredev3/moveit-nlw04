@@ -43,8 +43,9 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
       });
     }
 
-    // por enquanto vai ser 2 minutos para testes
-    const endingTime = toDate(addMinutes(countdown.endingTime, 2));
+    const { startTime } = countdown;
+
+    const endingTime = toDate(addMinutes(startTime, 1));
     const timeToCompareEndingTime = toDate(new Date());
 
     if (isAfter(endingTime, timeToCompareEndingTime)) {
@@ -82,45 +83,52 @@ export default async function challenge(req: NowRequest, res: NowResponse) {
     const createdAt = challenge ? challenge.createdAt : new Date();
     const updatedAt = new Date();
 
-    const update = {
-      $set: {
-        user: {
-          id: user.id,
-          name: user.name,
-          avatar: user.image,
-        },
-        level,
-        challengesCompleted,
-        currentExperience,
-        experienceToNextLevel,
-        createdAt,
-        updatedAt,
-      },
-    };
-
-    const options = {
-      returnNewDocument: true,
-      upsert: true,
-      new: true,
-    };
-
-    await challengesCollection.updateOne(query, update, options);
-
-    await countdownCollection.updateOne(
-      {
-        _id: new ObjectId(cycleId),
-      },
+    await challengesCollection.updateOne(query, 
       {
         $set: {
-          isInvalid: true,
+          user: {
+            id: user.id,
+            name: user.name,
+            avatar: user.image,
+          },
+          level,
+          challengesCompleted,
+          currentExperience,
+          experienceToNextLevel,
+          createdAt,
+          updatedAt,
         },
+      }, 
+      {
+        returnNewDocument: true,
+        upsert: true,
+        new: true,
       }
     );
+
+    // await countdownCollection.updateOne(
+    //   {
+    //     _id: new ObjectId(cycleId),
+    //   },
+    //   {
+    //     $set: {
+    //       isInvalid: true,
+    //     },
+    //   }
+    // );
 
     const challengeCompleted = await challengesCollection.findOne(query);
 
     return res.status(200).json({
-      challenge: challengeCompleted,
+      challenge: {
+        _id: challengeCompleted._id,
+        level: challengeCompleted.level,
+        challengesCompleted: challengeCompleted.challengesCompleted,
+        currentExperience: challengeCompleted.currentExperience, 
+        experienceToNextLevel: challengeCompleted.experienceToNextLevel,
+        createdAt: challengeCompleted.createdAt,
+        updatedAt: challengeCompleted.updatedAt,
+      },
     });
   } catch (err) {
     console.log(err);

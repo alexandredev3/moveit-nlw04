@@ -1,5 +1,4 @@
 import { NowRequest, NowResponse } from "@vercel/node";
-import { isValid } from "date-fns";
 import { getSession } from "next-auth/client";
 
 import { connectToDatabase } from "@lib/mongodb";
@@ -17,18 +16,11 @@ interface ISession {
   expires: Date;
 }
 
-async function initialCountdown(req: NowRequest, res: NowResponse) {
-  const { date } = req.query;
-  const dateToNumber = Number(date);
+export default async function startCountdown(req: NowRequest, res: NowResponse) {
   const session = ((await getSession({ req })) as unknown) as ISession;
   const { id } = session.user;
   const { db } = await connectToDatabase();
-
-  if (!isValid(dateToNumber)) {
-    return res.status(400).json({
-      error: "Date is invalid.",
-    });
-  }
+  const date = new Date();
 
   try {
     const usersCollection = db.collection("users");
@@ -45,7 +37,7 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
     }
 
     const countdown = await countdownCyclesCollection.insertOne({
-      endingTime: dateToNumber,
+      startTime: date,
       user: id,
       isInvalid: false,
       createdAt: new Date(),
@@ -61,5 +53,3 @@ async function initialCountdown(req: NowRequest, res: NowResponse) {
     return res.status(500).send("Internal Server Error");
   }
 }
-
-export default initialCountdown;
