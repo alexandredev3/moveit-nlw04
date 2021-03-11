@@ -14,18 +14,25 @@ export default async function leaderboard(req: NowRequest, res: NowResponse) {
      * but for now I will leave it at that.
      */
 
-    const leaderboard = await challengesCollection
+    const totalChallenges = await challengesCollection.count();
+    const pageLimit = 20;
+    const totalPage = Math.ceil(totalChallenges / pageLimit);
+
+    const challenges = await challengesCollection
       .find()
       .sort({
         level: -1,
         challengesCompleted: -1,
       })
-      .limit(20)
-      .skip((Number(page) - 1) * 20)
+      .limit(pageLimit)
+      .skip((Number(page) - 1) * pageLimit)
       .toArray();
 
     return res.status(200).json({
-      leaderboard,
+      leaderboard: {
+        totalPage,
+        challenges: challenges,
+      },
     });
   } catch (err) {
     console.log(err);
