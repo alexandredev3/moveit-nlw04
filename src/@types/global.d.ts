@@ -6,8 +6,8 @@ declare module NodeJS {
         client: MongoClient;
       }
       promise: Promise<{
-        db: Db;
-        client: MongoClient;
+        db: any;
+        client: any;
       }>;
     };
   }

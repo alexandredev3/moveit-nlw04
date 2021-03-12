@@ -1,8 +1,8 @@
-import { ISession } from "next-auth/client";
+import { ISessionBase } from "next-auth/client";
 
 import { connectToDatabase } from "@lib/mongodb";
 
-export default async function getChallenge(session: ISession) {
+export default async function getChallenge(session: ISessionBase) {
   const { db } = await connectToDatabase();
   const challengeCollection = db.collection("challenges");
   const experienceToNextLevel = Math.pow((1 + 1) * 4, 2);

@@ -1,3 +1,5 @@
+import * as client from 'next-auth/client';
+
 declare module "next-auth/client" {
   interface User {
     id?: string | null;
@@ -17,7 +19,7 @@ declare module "next-auth/client" {
     [key: string]: any;
   }
 
-  type ISession = ISessionBase & GenericObject;
+  export type ISession = ISessionBase & GenericObject;
 
   declare function session(
     context?: NextContext & {
