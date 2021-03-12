@@ -20,6 +20,7 @@ export const GlobalStyle = createGlobalStyle`
     --blue: #5965E0;
     --blue-dark: #4953B8;
     --blue-twitter: #2AA9E0;
+    --disabled: #9C98A6;
   }
 
   @media(max-width: 1080px) {

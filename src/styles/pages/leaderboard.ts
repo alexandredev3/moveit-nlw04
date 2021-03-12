@@ -77,3 +77,48 @@ export const Table = styled.table`
     }
   }
 `;
+
+export const PaginateContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 2.4rem;
+
+  span {
+    font-size: 1.2rem;
+    color: var(--blue);
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+
+    border: 0;
+    background: none;
+
+    outline: 1px solid var(--white);
+
+    &:disabled {
+      cursor: not-allowed;
+      
+      span {
+        color: var(--disabled);
+      }
+      path {
+        stroke: var(--disabled);
+      }
+    }
+  }
+`;
+
+export const PrevPageButton = styled.button`
+  span {
+    margin-left: 1rem;
+  }
+`;
+
+export const NextPageButton = styled.button`
+  span {
+    margin-right: 1rem;
+  }
+`;
