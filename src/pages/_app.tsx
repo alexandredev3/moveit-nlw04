@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { Provider } from 'next-auth/client';
+import { SWRConfig } from 'swr';
 import NProgress from 'nprogress';
 
 import { GlobalStyle } from '../styles/global';
@@ -29,10 +30,33 @@ function MyApp({ Component, pageProps }) {
   }, [router])
 
   return (
-    <Provider session={pageProps.session}>
-      <GlobalStyle />
-      <Component {...pageProps} />
-    </Provider>
+    <SWRConfig
+      value={{
+        onError: (error) => {
+          return alert('Ocorreu um error inesperado, tente novamente mais tarde...')
+        },
+        onErrorRetry: (error, _, config, revalidate, { retryCount }) => {
+          if (error.status === 500) {
+            alert("Ocorreu um erro no servidor tente novamente mais tarde.");
+          }
+  
+          if (retryCount >= 5) {
+            return alert(
+              "Ocorreu um error inesperado, tente novamente mais tarde..."
+            );
+          }
+  
+          setTimeout(() => {
+            return revalidate({ retryCount: retryCount + 1 });
+          }, 5000);
+        }
+      }}
+    >
+      <Provider session={pageProps.session}>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </Provider>
+    </SWRConfig>
   );
 }
 

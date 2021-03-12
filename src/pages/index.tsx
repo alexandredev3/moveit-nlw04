@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
+import { getSession, ISession } from 'next-auth/client';
+import getChallenge from './api/getChallenge';
 
 import { ContainerHome, Container, Section } from '../styles/pages/app';
 
@@ -10,19 +11,10 @@ import { Profile } from '../components/Profile';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
 import { Sidebar } from '../components/Sidebar';
-import { SigninMessage } from '../components/SigninMessage';
+import { Unauthenticated } from '../components/Unauthenticated';
 
 import { CountdownProvider } from '../contexts/CountdownContext';
 import { ChallengeProvider } from '../contexts/ChallengeContext';
-
-interface ISession {
-  user: {
-    name: string;
-    image: string;
-  };
-  accessToken: string;
-  expires: Date;
-}
 
 interface IHomeProps {
   level: number;
@@ -62,7 +54,7 @@ function Home({
                       imgUrl={session.user.image}
                     />
                   ) : (
-                    <SigninMessage />
+                    <Unauthenticated />
                   )
                 }
                 <CompletedChallenges />
@@ -80,17 +72,29 @@ function Home({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context;
-  // todos os cookies da nossa aplicação.
-  const { level, currentExperience, challengesCompleted } = req.cookies;
   const session = await getSession(context);
+
+  if (!session) {
+    const { level, currentExperience, challengesCompleted } = context.req.cookies;
+
+    return {
+      props: {
+        level: Number(level ?? 1),
+        currentExperience: Number(currentExperience ?? 0),
+        challengesCompleted: Number(challengesCompleted ?? 0),
+        session: null,
+      }
+    }
+  }
+
+  const { challenge } = await getChallenge(session);
 
   return {
     props: {
-      level: Number(level ?? 1),
-      currentExperience: Number(currentExperience ?? 0),
-      challengesCompleted: Number(challengesCompleted ?? 0),
-      session: session ?? null,
+      level: challenge.level,
+      currentExperience: challenge.currentExperience,
+      challengesCompleted: challenge.challengesCompleted,
+      session: session,
     }
   }
 }

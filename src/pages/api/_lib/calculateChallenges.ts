@@ -13,24 +13,12 @@ interface CalculateChallenges {
 }
 
 function handleExperienceToNextLevel(level: number | null) {
-  if (!level) {
-    const experienceToNextLevel = Math.pow((1 + 1) * 4, 2);
-
-    return experienceToNextLevel;
-  }
-
   const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
 
   return experienceToNextLevel;
 }
 
 function handleCompleteChallenge(challengesCompleted: number | null) {
-  if (!challengesCompleted) {
-    const challengeCompletedCount = 0 + 1;
-
-    return challengeCompletedCount;
-  }
-
   const challengeCompletedCount = challengesCompleted + 1;
 
   return challengeCompletedCount;
@@ -43,30 +31,13 @@ function handleLevelUp(currentLevel: number) {
 }
 
 function handleFinalExperience(
-  currentExperience: number | null,
-  level: number | null,
+  currentExperience: number,
+  level: number,
   amount: number,
   experienceToNextLevel: number
 ) {
-  if (!currentExperience) {
-    let finalExperience = 0 + amount;
-    let finalLevel = 1;
-
-    if (finalExperience >= experienceToNextLevel) {
-      finalExperience = finalExperience - experienceToNextLevel;
-      finalLevel = handleLevelUp(finalLevel);
-    }
-
-    return {
-      finalExperience,
-      finalLevel,
-    };
-  }
-
   let finalExperience = currentExperience + amount;
   let finalLevel = level;
-
-  console.log(currentExperience);
 
   if (finalExperience >= experienceToNextLevel) {
     finalExperience = finalExperience - experienceToNextLevel;
@@ -85,13 +56,13 @@ export function calculateChallenges({
 }: CalculateChallenges) {
   const { amount } = activeChallenge;
 
-  const experienceToNextLevel = handleExperienceToNextLevel(challenge?.level);
+  const experienceToNextLevel = handleExperienceToNextLevel(challenge.level);
   const challengesCompleted = handleCompleteChallenge(
-    challenge?.challengesCompleted
+    challenge.challengesCompleted
   );
   const { finalExperience, finalLevel } = handleFinalExperience(
-    challenge?.currentExperience,
-    challenge?.level,
+    challenge.currentExperience,
+    challenge.level,
     amount,
     experienceToNextLevel
   );

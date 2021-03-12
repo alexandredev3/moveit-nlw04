@@ -1,4 +1,6 @@
 import { createContext, ReactNode, useEffect, useState, useContext } from "react";
+import { useSession } from 'next-auth/client';
+import { api } from "services/api";
 
 import { useChallenge } from '../contexts/ChallengeContext';
 
@@ -24,8 +26,9 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
   const { startNewChallenge } = useChallenge(); 
 
   // 25 minutos representado em segundos.
-  const startTime = 0.1 * 60
+  const startTime = 1 * 60
 
+  const [session] = useSession();
   const [time, setTime] = useState(startTime);
   const [isActive, setIsActive] = useState(false);
   const [hasTimeFinished, setHasTimeFinished] = useState(false);
@@ -47,8 +50,15 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
     }
   }, [isActive, time]);
 
-  function startCountdown() {
-    return setIsActive(true);
+  async function startCountdown() {
+    try {
+      setIsActive(true);
+      if (session) {
+        await api.post('/countdown/startCountdown');
+      }
+    } catch(err) {
+      alert("Ocorreu um erro ao iniciar a contagem regressiva, tente novamente...");
+    }
   }
 
   function resetCountdown() {

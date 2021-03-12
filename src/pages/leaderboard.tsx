@@ -1,5 +1,9 @@
 import Head from 'next/head';
-import { 
+import useSWR from 'swr';
+
+import { fetcher } from '../services/fetcher';
+
+import {
   ContainerLeaderboard,
   Container,
   Main,
@@ -9,8 +13,29 @@ import {
 
 import { Sidebar } from '../components/Sidebar';
 import { UserLeaderboard } from '../components/UserLeaderboard';
- 
+
+interface IChallenge {
+  _id: string;
+  level: number;
+  currentExperience: number;
+  experienceToNextLevel: number;
+  challengesCompleted: number;
+  user: {
+    id: string;
+    name: string;
+    avatar: string;
+  }
+}
+
 export default function Leaderboard() {
+  const { data } = useSWR(`/challenge/leaderboard?page=${1}`, fetcher);
+
+  if (!data) {
+    return <h2>Loading...</h2>
+  }
+
+  console.log(data)
+
   return (
     <ContainerLeaderboard>
       <Sidebar page="leaderboard" />
@@ -41,26 +66,36 @@ export default function Leaderboard() {
                 </th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td className="position__body">
-                  1
-                </td>
-                <td>
-                  <UserLeaderboard 
-                    name="Alexandre Costa"
-                    level={1}
-                    imgUrl="https://github.com/alexandredev3.png"
-                  />
-                </td>
-                <td>
-                  <strong>127</strong> completados
-                </td>
-                <td>
-                  <strong>154000</strong> xp
-                </td>
-              </tr>
-            </tbody>
+            {
+              data.leaderboard.challenges.map((challenge: IChallenge, index) => {
+                const positionCount = index + 1;
+
+                return (
+                  <tbody
+                    key={challenge._id}
+                  >
+                    <tr>
+                      <td className="position__body">
+                        {positionCount}
+                      </td>
+                      <td>
+                        <UserLeaderboard 
+                          name={challenge.user.name}
+                          level={challenge.level}
+                          imgUrl={challenge.user.avatar}
+                        />
+                      </td>
+                      <td>
+                        <strong>{challenge.challengesCompleted}</strong> completados
+                      </td>
+                      <td>
+                        <strong>{challenge.currentExperience}</strong> xp
+                      </td>
+                    </tr>
+                  </tbody>
+                )
+              })
+            }
           </Table>
         </Main>
       </Container>

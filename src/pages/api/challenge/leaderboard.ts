@@ -8,12 +8,12 @@ export default async function leaderboard(req: NowRequest, res: NowResponse) {
 
   const challengesCollection = db.collection("challenges");
 
-  try {
-    /**
-     * with the "skip" this route loses performance according to the scale application,
-     * but for now I will leave it at that.
-     */
+  /**
+   * with the "skip" this route loses performance according to the scale application,
+   * but for now I will leave it at that.
+   */
 
+  try {
     const totalChallenges = await challengesCollection.count();
     const pageLimit = 20;
     const totalPage = Math.ceil(totalChallenges / pageLimit);
@@ -37,6 +37,6 @@ export default async function leaderboard(req: NowRequest, res: NowResponse) {
   } catch (err) {
     console.log(err);
 
-    return res.status(500).send("Internal Server Error");
+    return res.status(500).json("Internal Server Error");
   }
 }

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-export const SigninMessageContainer = styled.div`
+export const SigninUnauthenticated = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   span {
-    width: 70%;
+    width: 86%;
     font-weight: 500;
     font-size: 1.3rem;
   }

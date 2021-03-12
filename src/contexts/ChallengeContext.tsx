@@ -1,8 +1,10 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
+import { useSession } from 'next-auth/client';
 import Cookies from 'js-cookie';
 
 import challenges from '../../challenges.json';
 import { LevelUpModal } from '../components/LevelUpModal';
+import { api } from 'services/api';
 
 interface IChallenge {
   type: 'body' | 'eye' | string;
@@ -33,11 +35,13 @@ interface IChallengeProviderProps {
 export const ChallengeContext = createContext<IChallengeContextData>({} as IChallengeContextData);
 
 export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps) {
+  const [session, loading] = useSession();
   const [level, setLevel] = useState(rest.level);
   const [currentExperience, setCurrentExperience] = useState(rest.currentExperience);
   const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted);
   const [activeChallenge, setActiveChallenge] = useState<IChallenge | null>(null);
   const [isLevelUpModalOpen, setIsModalLevelUpOpen] = useState(false);
+  const [challengeIndex, setChallengeIndex] = useState(0);
 
   // pow calculo de potencia.
   // 4 e o fator de experiencia, mude esse valor se voce quiser deixar mais facil ou dificil
@@ -45,16 +49,18 @@ export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps
 
   useEffect(() => {
     /**
-     * Pedindo permição para enviar notificações,
+     * Pedindo permissão para enviar notificações,
      * Notification e a API nativa do browser
      */
     Notification.requestPermission();
   }, []);
 
   useEffect(() => {
-    Cookies.set('level', String(level));
-    Cookies.set('currentExperience', String(currentExperience));
-    Cookies.set('challengesCompleted', String(challengesCompleted));
+    if (!session && !loading) {
+      Cookies.set('level', String(level));
+      Cookies.set('currentExperience', String(currentExperience));
+      Cookies.set('challengesCompleted', String(challengesCompleted));
+    }
   }, [level, currentExperience, challengesCompleted]);
 
   const closeLevelUpModal = useCallback(() => {
@@ -75,6 +81,7 @@ export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length)
     const challenge = challenges[randomChallengeIndex];
 
+    setChallengeIndex(randomChallengeIndex);
     setActiveChallenge(challenge);
 
     // Audio API nativa do Browser
@@ -91,23 +98,31 @@ export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps
     setActiveChallenge(null);
   }, []);
 
-  const completeChallenge = useCallback(() => {
+  const completeChallenge = useCallback(async () => {
     if (!activeChallenge) {
       return;
     }
 
-    const { amount } = activeChallenge;
+    try {
+      const { amount } = activeChallenge;
 
-    let finalExperience = currentExperience + amount;
-
-    if (finalExperience >= experienceToNextLevel) {
-      finalExperience = finalExperience - experienceToNextLevel;
-      levelUp();
+      let finalExperience = currentExperience + amount;
+  
+      if (finalExperience >= experienceToNextLevel) {
+        finalExperience = finalExperience - experienceToNextLevel;
+        levelUp();
+      }
+  
+      setActiveChallenge(null);
+      setCurrentExperience(finalExperience);
+      setChallengesCompleted(challengesCompleted + 1);
+  
+      if (session) {
+        await api.post(`/challenge/${challengeIndex}`);
+      }
+    } catch(err) {
+      alert("Ocorreu um erro ao mandar os dados para o servidor, tente novamente...");
     }
-
-    setActiveChallenge(null);
-    setCurrentExperience(finalExperience);
-    setChallengesCompleted(challengesCompleted + 1);
   }, [activeChallenge])
 
   return (

@@ -29,21 +29,24 @@ const options: InitOptions = {
   secret: SECRET,
 
   debug: false,
-
   callbacks: {
     async signIn(user: any, account: IAccount, profile: any) {
       return true;
     },
-    async redirect(url: string, baseUrl: string) {
-      return baseUrl;
+    async redirect(url: string, _: string) {
+      if (url === "/api/auth/signin") {
+        return Promise.resolve("/");
+      }
+
+      return Promise.resolve("/api/auth/signin");
     },
     async session(session: any, user: any) {
       session.user = user;
 
-      return session;
+      return Promise.resolve(session);
     },
     async jwt(token: any, profile: any) {
-      return token;
+      return Promise.resolve(token);
     },
   },
 };
