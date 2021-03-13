@@ -23,6 +23,7 @@ export default async function leaderboard(req: NowRequest, res: NowResponse) {
       .sort({
         level: -1,
         challengesCompleted: -1,
+        currentExperience: -1,
       })
       .limit(pageLimit)
       .skip((Number(page) - 1) * pageLimit)
