@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import useSWR from 'swr';
 
@@ -16,7 +17,7 @@ import {
 
 import { Sidebar } from '../components/Sidebar';
 import { UserLeaderboard } from '../components/UserLeaderboard';
-import { useState } from 'react';
+import { LoadingLeaderboard } from '../components/Shimmer/LoadingLeaderboard';
 
 interface IChallenge {
   _id: string;
@@ -36,7 +37,7 @@ export default function Leaderboard() {
   const { data } = useSWR(`/challenge/leaderboard?page=${page}`, fetcher);
 
   if (!data) {
-    return <h2>Loading...</h2>
+    return <LoadingLeaderboard />;
   }
 
   const pages = data.leaderboard.totalPage;
