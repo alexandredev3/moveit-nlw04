@@ -52,11 +52,12 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
 
   async function startCountdown() {
     try {
-      setIsActive(true);
       if (session) {
         await api.post('/countdown/startCountdown');
       }
+      setIsActive(true);
     } catch(err) {
+      setIsActive(false);
       alert("Ocorreu um erro ao iniciar a contagem regressiva, tente novamente...");
     }
   }
