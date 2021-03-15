@@ -5,14 +5,20 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "analyze": "ANALYZE=true next build",
+    "analyze:server": "BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser next build"
   },
   "peerOptionalDependencies": {
     "mongodb": "^3.6.4"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^10.0.8",
     "@types/js-cookie": "^2.2.6",
     "axios": "^0.21.1",
+    "chrome-aws-lambda": "^8.0.0",
+    "cross-env": "^7.0.3",
     "date-fns": "^2.18.0",
     "js-cookie": "^2.2.1",
     "mongodb": "^3.6.4",
@@ -20,6 +26,7 @@
     "next-auth": "^3.7.0",
     "nprogress": "^0.2.0",
     "polished": "^4.1.1",
+    "puppeteer-core": "^8.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "styled-components": "^5.2.1",

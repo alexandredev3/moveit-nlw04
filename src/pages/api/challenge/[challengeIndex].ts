@@ -36,92 +36,89 @@ export default async function completeChallenge(
   const countdownCollection = db.collection("countdown_cycles");
   const challengesCollection = db.collection("challenges");
 
-  if (req.method === "POST") {
-    const countdown = await countdownCollection
-      .find({
-        isInvalid: false,
-        $where: () => {
-          this.user === session.user.id;
-        },
-      })
-      .sort({
-        startTime: -1,
-      })
-      .toArray();
-
-    const recentCountdownCycle = countdown[0];
-
-    if (!recentCountdownCycle) {
-      return res.status(400).json({
-        error: "You did not start a countdown cycle",
-      });
-    }
-
-    const { startTime } = recentCountdownCycle;
-
-    const endingTime = toDate(addMinutes(startTime, 1));
-    const timeToCompareEndingTime = toDate(new Date());
-
-    if (isAfter(endingTime, timeToCompareEndingTime)) {
-      return res.status(400).json({
-        error: "Your countdown cycle is not over yet.",
-      });
-    }
-
-    const activeChallenge = challenges[challengeIndex] as ActiveChallenge;
-
-    if (!activeChallenge) {
-      return res.status(400).json({
-        error: "This challenge does not exist.",
-      });
-    }
-
-    const query = {
+  const countdown = await countdownCollection
+    .find({
+      isInvalid: false,
       $where: () => {
-        this.user.id === session.user.id;
+        this.user === session.user.id;
       },
-    };
+    })
+    .sort({
+      startTime: -1,
+    })
+    .toArray();
 
-    const challenge = await challengesCollection.findOne(query);
+  const recentCountdownCycle = countdown[0];
 
-    const {
-      challengesCompleted,
-      experienceToNextLevel,
-      level,
-      currentExperience,
-    } = calculateChallenges({
-      challenge,
-      activeChallenge,
+  if (!recentCountdownCycle) {
+    return res.status(400).json({
+      error: "You did not start a countdown cycle",
     });
-
-    await challengesCollection.updateOne(query, {
-      $set: {
-        user: {
-          id: session.user.id,
-          name: session.user.name,
-          avatar: session.user.image,
-        },
-        level,
-        challengesCompleted,
-        currentExperience,
-        experienceToNextLevel,
-        updatedAt: new Date(),
-      },
-    });
-
-    await countdownCollection.updateOne(
-      {
-        _id: new ObjectId(recentCountdownCycle._id),
-      },
-      {
-        $set: {
-          isInvalid: true,
-        },
-      }
-    );
-
-    return res.status(204).send;
   }
 
-  return res.status(404).json("Page not found");
+  const { startTime } = recentCountdownCycle;
+
+  const endingTime = toDate(addMinutes(startTime, 1));
+  const timeToCompareEndingTime = toDate(new Date());
+
+  if (isAfter(endingTime, timeToCompareEndingTime)) {
+    return res.status(400).json({
+      error: "Your countdown cycle is not over yet.",
+    });
+  }
+
+  const activeChallenge = challenges[challengeIndex] as ActiveChallenge;
+
+  if (!activeChallenge) {
+    return res.status(400).json({
+      error: "This challenge does not exist.",
+    });
+  }
+
+  const query = {
+    $where: () => {
+      this.user.id === session.user.id;
+    },
+  };
+
+  const challenge = await challengesCollection.findOne(query);
+
+  const {
+    challengesCompleted,
+    experienceToNextLevel,
+    level,
+    currentExperience,
+  } = calculateChallenges({
+    challenge,
+    activeChallenge,
+  });
+
+  await challengesCollection.updateOne(query, {
+    $set: {
+      user: {
+        id: session.user.id,
+        name: session.user.name,
+        avatar: session.user.image,
+      },
+      level,
+      challengesCompleted,
+      currentExperience,
+      experienceToNextLevel,
+      updatedAt: new Date(),
+    },
+  });
+
+  await countdownCollection.updateOne(
+    {
+      _id: new ObjectId(recentCountdownCycle._id),
+    },
+    {
+      $set: {
+        isInvalid: true,
+      },
+    }
+  );
+
+  return res.status(204).send;
 }
+

@@ -2,6 +2,8 @@ import { ISessionBase } from "next-auth/client";
 
 import { connectToDatabase } from "@lib/mongodb";
 
+const { NODE_ENV, NEXT_PUBLIC_VERCEL_URL } = process.env;
+
 export default async function getChallenge(session: ISessionBase) {
   const { db } = await connectToDatabase();
   const challengeCollection = db.collection("challenges");
@@ -34,7 +36,12 @@ export default async function getChallenge(session: ISessionBase) {
     };
   }
 
+  const thumbnailUrl = NODE_ENV === 'development' 
+    ? 'http://localhost:3000/api/thumbnail' 
+    : `https://${NEXT_PUBLIC_VERCEL_URL}/api/thumbnail`;
+
   return {
     challenge,
+    thumbnailUrl: `${thumbnailUrl}?id=${session.user.id}`
   };
 }

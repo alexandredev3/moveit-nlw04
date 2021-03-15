@@ -21,13 +21,15 @@ interface IHomeProps {
   currentExperience: number;
   challengesCompleted: number;
   session: ISession | null;
+  thumbnailUrl: string;
 }
 
 function Home({ 
   level, 
   challengesCompleted, 
   currentExperience, 
-  session 
+  session,
+  thumbnailUrl
 }: IHomeProps) {
   return (
     <ContainerHome>
@@ -40,6 +42,20 @@ function Home({
         <Container>
           <Head>
             <title>Inicio | move.it</title>
+
+            <meta name="description" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
+
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="https://metatags.io/" />
+            <meta property="og:title" content="Move.it" />
+            <meta property="og:description" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
+            <meta property="og:image" content={thumbnailUrl} />
+
+            <meta property="twitter:card" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
+            <meta property="twitter:url" content="https://metatags.io/" />
+            <meta property="twitter:title" content="Move.it" />
+            <meta property="twitter:description" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
+            <meta property="twitter:image" content={thumbnailUrl} />
           </Head>
 
           <ExperienceBar />
@@ -87,13 +103,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const { challenge } = await getChallenge(session);
+  const { challenge, thumbnailUrl } = await getChallenge(session);
 
   return {
     props: {
       level: challenge.level,
       currentExperience: challenge.currentExperience,
       challengesCompleted: challenge.challengesCompleted,
+      thumbnailUrl,
       session: session,
     }
   }
