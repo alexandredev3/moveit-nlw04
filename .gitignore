@@ -38,3 +38,6 @@ yarn-error.log*
 rsa.private
 
 package-lock.json
+
+# Local Netlify folder
+.netlify
