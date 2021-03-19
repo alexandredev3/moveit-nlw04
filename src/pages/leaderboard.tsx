@@ -70,6 +70,20 @@ export default function Leaderboard() {
       <Container>
           <Head>
             <title>Leaderboard | move.it</title>
+
+            <meta name="description" content="Fique entre os melhores!" />
+
+            <meta property="og:site_name" content="Move.it" />
+
+            <meta property="og:type" content="website" />
+            <meta property="og:title" content="Move.it" />
+            <meta property="og:url" content="https://moveit-alexandredev3.vercel.app/" />
+            <meta property="og:description" content="Fique entre os melhores!" />
+
+            <meta property="twitter:card" content="summary_large_image" />
+            <meta property="twitter:url" content="https://moveit-alexandredev3.vercel.app/" />
+            <meta property="twitter:title" content="Move.it" />
+            <meta property="twitter:description" content="Fique entre os melhores!" />
           </Head>
 
         <Header>
