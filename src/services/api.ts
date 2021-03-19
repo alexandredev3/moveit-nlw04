@@ -1,10 +1,11 @@
 import axios from "axios";
 
-const { NODE_ENV, URL } = process.env;
+const environment = process.env.NODE_ENV;
+const vercelURL = process.env.NEXT_PUBLIC_VERCEL_URL
 
-const baseURL = NODE_ENV === 'development' 
+const baseURL = environment === 'development' 
   ? 'http://localhost:3000/api/' 
-  : `${URL}/api/`;
+  : `https://${vercelURL}/api/`;
 
 export const api = axios.create({
   baseURL,
