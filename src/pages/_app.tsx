@@ -9,7 +9,7 @@ import '../styles/nprogress.css';
 import { useEffect } from 'react';
 
 NProgress.configure({
-  showSpinner: false,
+  showSpinner: false
 })
 
 function MyApp({ Component, pageProps }) {

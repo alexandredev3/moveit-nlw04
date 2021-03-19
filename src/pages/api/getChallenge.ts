@@ -36,12 +36,7 @@ export default async function getChallenge(session: ISessionBase) {
     };
   }
 
-  const thumbnailUrl = NODE_ENV === 'development' 
-    ? 'http://localhost:3000/api/thumbnail' 
-    : `${URL}/api/thumbnail`;
-
   return {
     challenge,
-    thumbnailUrl: `${thumbnailUrl}?id=${session.user.id}`
   };
 }
