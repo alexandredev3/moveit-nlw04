@@ -6,6 +6,12 @@ declare module "next-auth/client" {
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    github_profile: {
+      id: number | null;
+      image: string | null;
+      name: string | null;
+      username: string | null;
+    }
   }
 
   interface ISessionBase {
