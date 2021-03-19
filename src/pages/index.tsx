@@ -1,13 +1,11 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { getSession, ISession } from 'next-auth/client';
-import getChallenge from './api/getChallenge';
+import { getSession } from 'next-auth/client';
 
 import { ContainerHome, Container, Section } from '../styles/pages/app';
 
 import { CompletedChallenges } from '../components/CompletedChallenges';
 import { ExperienceBar } from '../components/ExperienceBar'
-import { Profile } from '../components/Profile';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
 import { Sidebar } from '../components/Sidebar';
@@ -20,14 +18,12 @@ interface IHomeProps {
   level: number;
   currentExperience: number;
   challengesCompleted: number;
-  session: ISession | null;
 }
 
 function Home({ 
   level, 
   challengesCompleted, 
   currentExperience, 
-  session
 }: IHomeProps) {
   return (
     <ContainerHome>
@@ -43,13 +39,20 @@ function Home({
 
             <meta name="description" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
 
+            <meta property="og:site_name" content="Move.it" />
+
             <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://metatags.io/" />
             <meta property="og:title" content="Move.it" />
+            <meta property="og:url" content="https://moveit-alexandredev3.vercel.app/" />
             <meta property="og:description" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
 
-            <meta property="twitter:card" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
-            <meta property="twitter:url" content="https://metatags.io/" />
+            <meta property="og:image:type" content="image/png" />
+            
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+
+            <meta property="twitter:card" content="summary_large_image" />
+            <meta property="twitter:url" content="https://moveit-alexandredev3.vercel.app/" />
             <meta property="twitter:title" content="Move.it" />
             <meta property="twitter:description" content="O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos." />
           </Head>
@@ -59,16 +62,7 @@ function Home({
           <CountdownProvider>
             <Section>
               <div>
-                {
-                  session ? (
-                    <Profile 
-                      name={session.user.name}
-                      imgUrl={session.user.image}
-                    />
-                  ) : (
-                    <Unauthenticated />
-                  )
-                }
+                <Unauthenticated />
                 <CompletedChallenges />
                 <Countdown />
               </div>
@@ -94,19 +88,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         level: Number(level ?? 1),
         currentExperience: Number(currentExperience ?? 0),
         challengesCompleted: Number(challengesCompleted ?? 0),
-        session: null,
       }
     }
   }
 
-  const { challenge } = await getChallenge(session);
-
   return {
-    props: {
-      level: challenge.level,
-      currentExperience: challenge.currentExperience,
-      challengesCompleted: challenge.challengesCompleted,
-      session: session,
+    redirect: {
+      destination: `/${session.user.github_profile.username}`,
+      permanent: false,
     }
   }
 }
