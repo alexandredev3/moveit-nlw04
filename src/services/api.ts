@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const environment = process.env.NODE_ENV;
-const vercelURL = process.env.NEXT_PUBLIC_VERCEL_URL
+const ENVIRONMENT = process.env.NODE_ENV;
 
-const baseURL = environment === 'development' 
+const baseURL = ENVIRONMENT === 'development' 
   ? 'http://localhost:3000/api/' 
-  : `https://${vercelURL}/api/`;
+  : 'https://moveit-alexandredev3.vercel.app/api';
 
 export const api = axios.create({
   baseURL,
