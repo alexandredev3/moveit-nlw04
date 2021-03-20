@@ -63,18 +63,10 @@ function Home({
           <CountdownProvider>
             <Section>
               <div>
-                  <Profile 
-                    name={session.user.name}
-                    imgUrl={session.user.image}
-                  />
-                <button onClick={() => showToast({
-                    type: 'info',
-                    title: 'Bem-vindo',
-                    description: `Seja bem-vindo ${session.user.name}`
-                  })}
-                >
-                  Abrir Toast Teste
-                </button>
+                <Profile 
+                  name={session.user.name}
+                  imgUrl={session.user.image}
+                />
                 <CompletedChallenges />
                 <Countdown />
               </div>

@@ -1,11 +1,11 @@
-import NextAuth, { InitOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import Providers from "next-auth/providers";
-import { NowRequest, NowResponse } from "@vercel/node";
-import { GenericObject } from "next-auth/_utils";
+import { GenericObject } from "next-auth/client";
 
 import { connectToDatabase } from '@lib/mongodb';
 
 import { ObjectId } from "mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const {
   GITHUB_CLIENT_ID,
@@ -16,7 +16,7 @@ const {
 
 let username: string;
 
-const options: InitOptions = {
+const options: NextAuthOptions = {
   providers: [
     Providers.GitHub({
       clientId: GITHUB_CLIENT_ID,
@@ -92,5 +92,5 @@ const options: InitOptions = {
   },
 };
 
-export default (req: NowRequest, res: NowResponse) =>
+export default (req: NextApiRequest, res: NextApiResponse) =>
   NextAuth(req, res, options);
