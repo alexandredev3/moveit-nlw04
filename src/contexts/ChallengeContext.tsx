@@ -87,19 +87,17 @@ export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps
     setActiveChallenge(challenge);
 
     // Audio API nativa do Browser
+    new Audio('/notification.mp3').play();
+    
+    const reachedTheScreenLimitForNotification = window.screen.width < 720;
 
-    const reachedTheScreenLimitForAudio = window.screen.width < 720;
-
-    // new Audio('/notification.mp3').play();
-
-    // if (!reachedTheScreenLimitForAudio) {
-
-    //   if (Notification.permission === 'granted') {
-    //     new Notification('Novo desafio', {
-    //       body: `Valendo ${challenge.amount}xp`,
-    //     });
-    //   }
-    // }
+    if (!reachedTheScreenLimitForNotification) {
+      if (Notification.permission === 'granted') {
+        new Notification('Novo desafio', {
+          body: `Valendo ${challenge.amount}xp`,
+        });
+      }
+    }
   }, []);
 
   const resetChallenge = useCallback(() => {
