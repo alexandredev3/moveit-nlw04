@@ -14,22 +14,23 @@ import { Sidebar } from '../components/Sidebar';
 
 import { CountdownProvider } from '../contexts/CountdownContext';
 import { ChallengeProvider } from '../contexts/ChallengeContext';
+import { useToast } from '../contexts/ToastContext';
 
 interface IHomeProps {
   level: number;
   currentExperience: number;
   challengesCompleted: number;
   session: ISession | null;
-  thumbnailUrl: string;
 }
 
 function Home({ 
   level, 
   challengesCompleted, 
   currentExperience, 
-  session,
-  thumbnailUrl
+  session
 }: IHomeProps) {
+  const { showToast } = useToast();
+
   return (
     <ContainerHome>
       <Sidebar page="home" />
@@ -66,6 +67,14 @@ function Home({
                     name={session.user.name}
                     imgUrl={session.user.image}
                   />
+                <button onClick={() => showToast({
+                    type: 'info',
+                    title: 'Bem-vindo',
+                    description: `Seja bem-vindo ${session.user.name}`
+                  })}
+                >
+                  Abrir Toast Teste
+                </button>
                 <CompletedChallenges />
                 <Countdown />
               </div>
