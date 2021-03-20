@@ -3,6 +3,7 @@ import * as client from 'next-auth/client';
 declare module "next-auth/client" {
   interface User {
     id?: string | null;
+    isNewUser?: boolean | null;
     name?: string | null;
     email?: string | null;
     image?: string | null;

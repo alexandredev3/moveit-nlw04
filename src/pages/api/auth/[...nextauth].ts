@@ -1,11 +1,11 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import Providers from "next-auth/providers";
 import { GenericObject } from "next-auth/client";
+import { NextApiRequest, NextApiResponse } from "next";
+import { ObjectId } from "mongodb";
 
 import { connectToDatabase } from '@lib/mongodb';
-
-import { ObjectId } from "mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
+import { getUpdateUser } from '../users/getUpdateUser';
 
 const {
   GITHUB_CLIENT_ID,
@@ -50,6 +50,7 @@ const options: NextAuthOptions = {
         {
           $set: {
             username,
+            isNewUser: true
           }
         }
       )
@@ -67,14 +68,26 @@ const options: NextAuthOptions = {
       return Promise.resolve("/");
     },
     async session(session: any, user: any) {
-      session.user = user;
+      const { isNewUser } = await getUpdateUser(user.id);
+
+      session.user = {
+        ...user,
+        isNewUser
+      };
 
       return Promise.resolve(session);
     },
-    async jwt(token: GenericObject, user: GenericObject, account: GenericObject, profile: GenericObject) {
+    async jwt(
+      token: GenericObject, 
+      user: GenericObject, 
+      account: GenericObject, 
+      profile: GenericObject, 
+      isNewUser: boolean,
+    ) {
       if (user) {
         token = {
           id: user.id,
+          isNewUser,
           ...user
         }
         token.github_profile = {

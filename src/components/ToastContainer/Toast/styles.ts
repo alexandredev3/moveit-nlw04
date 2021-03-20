@@ -18,8 +18,7 @@ export const Container = styled.div`
 
   background: rgba(242, 243, 245, 0.8);
 
-  min-width: 386px;
-  width: 100%;
+  width: 442px;
 
   border: 2px solid var(--gray-line);
   border-radius: 8px;
@@ -39,6 +38,7 @@ export const Infos = styled.div`
   }
 
   > p {
+    margin-top: 0.2rem;
     font-size: 1rem;
   }
 `;

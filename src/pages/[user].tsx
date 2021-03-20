@@ -1,9 +1,10 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { getSession, ISession } from 'next-auth/client';
-import getChallenge from './api/getChallenge';
 
 import { ContainerHome, Container, Section } from '../styles/pages/app';
+import getChallenge from './api/challenge/getChallenge';
 
 import { CompletedChallenges } from '../components/CompletedChallenges';
 import { ExperienceBar } from '../components/ExperienceBar'
@@ -15,6 +16,7 @@ import { Sidebar } from '../components/Sidebar';
 import { CountdownProvider } from '../contexts/CountdownContext';
 import { ChallengeProvider } from '../contexts/ChallengeContext';
 import { useToast } from '../contexts/ToastContext';
+import { api } from 'services/api';
 
 interface IHomeProps {
   level: number;
@@ -30,6 +32,21 @@ function Home({
   session
 }: IHomeProps) {
   const { showToast } = useToast();
+
+  useEffect(() => {
+    const isNewUser = session.user.isNewUser;
+
+    if (isNewUser) {
+      showToast({
+        type: 'success',
+        title: 'Cadastro feito com sucesso!',
+        description: 
+          `Olá ${session.user.name}. Seja bem-vindo ao Move.it! Agora todo o seu progresso será salvo e você pode aparecer no Leaderboard e ficar entre os melhores!`
+      });
+
+      api.put('/users/updateNewUser');
+    }
+  }, []);
 
   return (
     <ContainerHome>
@@ -94,6 +111,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const { challenge } = await getChallenge(session);
+
+  console.log(challenge);
 
   return {
     props: {

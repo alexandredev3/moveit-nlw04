@@ -2,8 +2,6 @@ import { ISessionBase } from "next-auth/client";
 
 import { connectToDatabase } from "@lib/mongodb";
 
-const { NODE_ENV, URL } = process.env;
-
 export default async function getChallenge(session: ISessionBase) {
   const { db } = await connectToDatabase();
   const challengeCollection = db.collection("challenges");
@@ -32,7 +30,7 @@ export default async function getChallenge(session: ISessionBase) {
     });
 
     return {
-      challenge: challenge.ops,
+      challenge: challenge.ops[0],
     };
   }
 
