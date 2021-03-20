@@ -143,7 +143,7 @@ export default function Leaderboard() {
 
         <PaginateContainer>
           {
-            pages !== 1 && (
+            pages >= 1 && (
               <>
                 <PrevPageButton
                   onClick={handlePrevPage}

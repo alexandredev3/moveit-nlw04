@@ -4,6 +4,8 @@ import { api } from "services/api";
 
 import { useChallenge } from '../contexts/ChallengeContext';
 
+import { useToast } from '../contexts/ToastContext';
+
 interface ICountdownContextData {
   minutes: number;
   seconds: number;
@@ -24,6 +26,7 @@ let countdownTimeout: NodeJS.Timeout;
 
 export function CountdownProvider({ children }: ICountdownProviderProps) {
   const { startNewChallenge } = useChallenge(); 
+  const { showToast } = useToast();
 
   // 25 minutos representado em segundos.
   const startTime = 1 * 60
@@ -58,7 +61,11 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
       setIsActive(true);
     } catch(err) {
       setIsActive(false);
-      alert("Ocorreu um erro ao iniciar a contagem regressiva, tente novamente...");
+      showToast({
+        type: 'error',
+        title: 'Erro',
+        description: 'Ocorreu um erro ao iniciar a contagem regressiva, tente novamente...',
+      })
     }
   }
 

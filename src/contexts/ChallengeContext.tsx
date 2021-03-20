@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import challenges from '../../challenges.json';
 import { LevelUpModal } from '../components/LevelUpModal';
 import { api } from 'services/api';
+import { useToast } from '../contexts/ToastContext';
 
 interface IChallenge {
   type: 'body' | 'eye' | string;
@@ -42,6 +43,7 @@ export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps
   const [activeChallenge, setActiveChallenge] = useState<IChallenge | null>(null);
   const [isLevelUpModalOpen, setIsModalLevelUpOpen] = useState(false);
   const [challengeIndex, setChallengeIndex] = useState(0);
+  const { showToast } = useToast();
 
   // pow calculo de potencia.
   // 4 e o fator de experiencia, mude esse valor se voce quiser deixar mais facil ou dificil
@@ -127,7 +129,11 @@ export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps
         await api.post(`/challenge/${challengeIndex}`);
       }
     } catch(err) {
-      alert("Ocorreu um erro ao mandar os dados para o servidor, tente novamente...");
+      showToast({
+        type: 'error',
+        title: 'Erro',
+        description: 'Ocorreu um erro ao mandar os dados para o servidor, tente novamente...',
+      })
     }
   }, [activeChallenge])
 

@@ -26,8 +26,6 @@ function MyApp({ Component, pageProps }) {
     });
     router.events.on('routeChangeError', () => {
       NProgress.done();
-    
-      return alert('Erro ao tentar carregar a página, tente novamente.')
     });
   }, [router])
 
