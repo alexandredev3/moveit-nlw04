@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Provider } from 'next-auth/client';
-import { SWRConfig } from 'swr';
 import NProgress from 'nprogress';
 
 import { GlobalStyle } from '../styles/global';
 
 import { ToastProvider } from '../contexts/ToastContext';
+import { SWRProviderConfig } from '../contexts/SWRConfigContext';
 
 import '../styles/nprogress.css';
 
@@ -31,12 +31,12 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ToastProvider>
-      {/* <SWRConfig> */}
+      <SWRProviderConfig>
         <Provider session={pageProps.session}>
           <GlobalStyle />
           <Component {...pageProps} />
         </Provider>
-      {/* </SWRConfig> */}
+      </SWRProviderConfig>
     </ToastProvider>
   );
 }
