@@ -73,7 +73,7 @@ const options: NextAuthOptions = {
       session.user = {
         ...user,
         isNewUser
-      };
+      }
 
       return Promise.resolve(session);
     },
@@ -86,9 +86,8 @@ const options: NextAuthOptions = {
     ) {
       if (user) {
         token = {
-          id: user.id,
+          ...user,
           isNewUser,
-          ...user
         }
         token.github_profile = {
           id: profile.id,
