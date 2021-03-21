@@ -1,8 +1,7 @@
-import { NowRequest, NowResponse } from "@vercel/node";
-
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import { connectToDatabase } from "@lib/mongodb";
 
-export default async function leaderboard(req: NowRequest, res: NowResponse) {
+export default async function leaderboard(req: VercelRequest, res: VercelResponse) {
   const { db } = await connectToDatabase();
   const { page } = req.query;
 

@@ -1,4 +1,4 @@
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import { getSession } from "next-auth/client";
 import { ObjectId } from "mongodb";
 import { addMinutes, isAfter, toDate } from "date-fns";
@@ -15,8 +15,8 @@ interface ActiveChallenge {
 
 // when user complete a challenge;
 export default async function completeChallenge(
-  req: NowRequest,
-  res: NowResponse
+  req: VercelRequest,
+  res: VercelResponse
 ) {
   const challengeIndex = req.query.challengeIndex as string;
   const session = await getSession({ req });
@@ -76,9 +76,7 @@ export default async function completeChallenge(
   }
 
   const query = {
-    $where: () => {
-      this.user.id === session.user.id;
-    },
+    'user.id': session.user.id,
   };
 
   const challenge = await challengesCollection.findOne(query);
@@ -95,11 +93,6 @@ export default async function completeChallenge(
 
   await challengesCollection.updateOne(query, {
     $set: {
-      user: {
-        id: session.user.id,
-        name: session.user.name,
-        avatar: session.user.image,
-      },
       level,
       challengesCompleted,
       currentExperience,

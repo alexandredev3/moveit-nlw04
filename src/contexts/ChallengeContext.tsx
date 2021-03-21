@@ -78,8 +78,6 @@ export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps
     setIsModalLevelUpOpen(true);
   }, [level]);
 
-  console.log(process.platform)
-
   const startNewChallenge = useCallback(() => {
     // gerar numero aleatorio de 0 ate a quantidade de dasafios que temos no JSON.
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length)

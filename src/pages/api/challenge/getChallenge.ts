@@ -6,16 +6,13 @@ export default async function getChallenge(session: ISessionBase) {
   const { db } = await connectToDatabase();
   const challengeCollection = db.collection("challenges");
   const experienceToNextLevel = Math.pow((1 + 1) * 4, 2);
-  const query = {
-    $where: () => {
-      this.user.id === session.user.id;
-    },
-  };
 
-  const challenge = await challengeCollection.findOne(query);
+  const challenge = await challengeCollection.findOne({
+    'user.id': session.user.id,
+  });
 
   if (!challenge) {
-    const challenge = await challengeCollection.insert({
+    const challenge = await challengeCollection.insertOne({
       user: {
         id: session.user.id,
         name: session.user.name,

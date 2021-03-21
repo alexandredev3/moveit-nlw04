@@ -1,6 +1,3 @@
-import { VercelResponse, VercelRequest } from '@vercel/node';
-import { getSession } from 'next-auth/client';
-
 import { connectToDatabase } from '@lib/mongodb';
 import { ObjectId } from 'mongodb';
 

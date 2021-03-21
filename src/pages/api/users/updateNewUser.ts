@@ -11,7 +11,7 @@ export default async function update(req: VercelRequest, res: VercelResponse) {
   const usersCollection = db.collection('users');
 
   try {
-    await usersCollection.update(
+    await usersCollection.updateOne(
       { _id: new ObjectId(user.id) },
       { 
         $set: {
