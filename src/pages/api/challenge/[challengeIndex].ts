@@ -112,6 +112,6 @@ export default async function completeChallenge(
     }
   );
 
-  return res.status(204).send;
+  return res.end();
 }
 
