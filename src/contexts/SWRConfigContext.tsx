@@ -8,8 +8,8 @@ interface ISWRProviderConfigProps {
 }
 
 /**
- * Creating this context here, I will be able to use the ToastContext.
- * Now we have a Global Error Handling.
+ * Creating this context here, We'll be able to use the ToastContext.
+ * We have now a Global Error Handling.
  */
 export function SWRProviderConfig({ children }: ISWRProviderConfigProps) {
   const { showToast } = useToast();
@@ -26,20 +26,18 @@ export function SWRProviderConfig({ children }: ISWRProviderConfigProps) {
         },
         onErrorRetry: (error, _, config, revalidate, { retryCount }) => {
           if (error.status === 500) {
-            console.log(error)
-    
             showToast({
               type: 'error',
               title: 'Erro',
-              description: "Ocorreu um erro interno no servidor, tente novamente mais tarde..."
+              description: "Ocorreu um erro interno no servidor"
             })
           }
     
           if (retryCount >= 5) {
-            showToast({
+            return showToast({
               type: 'error',
               title: 'Erro',
-              description: `${String(error)}. tentando novamente...`
+              description: `${String(error)}.`
             })
           }
     
