@@ -18,6 +18,7 @@ import {
 import { Sidebar } from '../components/Sidebar';
 import { UserLeaderboard } from '../components/UserLeaderboard';
 import { LoadingLeaderboard } from '../components/Shimmer/LoadingLeaderboard';
+import { useToast } from 'contexts/ToastContext';
 
 interface IChallenge {
   _id: string;
@@ -33,8 +34,40 @@ interface IChallenge {
 }
 
 export default function Leaderboard() {
+  const { showToast } = useToast();
   const [page, setPage] = useState(1);
-  const { data } = useSWR(`/challenge/leaderboard?page=${page}`, fetcher);
+  const { data } = useSWR(`/challenge/leaderboard?page=${page}`, fetcher, {
+    onError: (error) => {
+      showToast({
+        type: 'error',
+        title: 'Erro',
+        description: String(error)
+      })
+    },
+    onErrorRetry: (error, _, config, revalidate, { retryCount }) => {
+      if (error.status === 500) {
+        console.log(error)
+
+        showToast({
+          type: 'error',
+          title: 'Erro',
+          description: "Ocorreu um erro interno no servidor, tente novamente mais tarde..."
+        })
+      }
+
+      if (retryCount >= 5) {
+        showToast({
+          type: 'error',
+          title: 'Erro',
+          description: `${String(error)}. tentando novamente...`
+        })
+      }
+
+      setTimeout(() => {
+        return revalidate({ retryCount: retryCount + 1 });
+      }, 5000);
+    }
+  });
 
   if (!data) {
     return <LoadingLeaderboard />;
@@ -143,7 +176,7 @@ export default function Leaderboard() {
 
         <PaginateContainer>
           {
-            pages >= 1 && (
+            pages > 1 && (
               <>
                 <PrevPageButton
                   onClick={handlePrevPage}

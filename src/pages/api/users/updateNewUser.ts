@@ -13,7 +13,11 @@ export default async function update(req: VercelRequest, res: VercelResponse) {
   try {
     await usersCollection.update(
       { _id: new ObjectId(user.id) },
-      { isNewUser: false }
+      { 
+        $set: {
+          isNewUser: false 
+        } 
+      }
     );
   } catch(err) {
     return res.status(500).send('Internal Server Error');

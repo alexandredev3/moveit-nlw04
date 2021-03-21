@@ -75,6 +75,8 @@ const options: NextAuthOptions = {
         isNewUser
       }
 
+      console.log(">>>>>", session)
+
       return Promise.resolve(session);
     },
     async jwt(
