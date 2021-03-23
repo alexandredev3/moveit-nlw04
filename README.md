@@ -10,6 +10,9 @@
   <a href="https://github.com/alexandredev3/moveit-nlw4/issues">
     <img alt="GitHub issues" src="https://img.shields.io/github/issues/alexandredev3/moveit-nlw4?color=29B6D1&style=flat-square">
   </a>
+  <a href="https://github.com/alexandredev3/moveit-nlw4/issues?q=is%3Aissue+is%3Aclosed">
+    <img alt="GitHub issues" src="https://badgen.net/github/closed-issues/alexandredev3/moveit-nlw4?color=29B6D1&style=flat-square">
+  </a>
   <a href="https://github.com/alexandredev3/moveit-nlw4/network">
     <img alt="GitHub forks" src="https://img.shields.io/github/forks/alexandredev3/moveit-nlw4?color=29B6D1&style=flat-square">
   </a>
