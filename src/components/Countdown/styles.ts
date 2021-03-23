@@ -1,7 +1,9 @@
 import styled, { css } from "styled-components";
+import { MotionProps } from 'framer-motion';
 
 interface Props {
   active: boolean;
+  timeLeft?: number;
 }
 
 export const CountdownContainer = styled.div`
@@ -44,6 +46,8 @@ export const CountdownContainer = styled.div`
 `;
 
 export const CountdownButton = styled.button<Props>`
+  outline: 1px solid transparent;
+
   width: 100%;
   height: 5rem;
 
@@ -62,14 +66,30 @@ export const CountdownButton = styled.button<Props>`
 
   transition: background-color 0.2s;
 
+  ${(props) => props.active && css`
+    &::after {
+      z-index: 2;
+
+      position: relative;
+      top: 26px;
+
+      content: "";
+
+      height: 4px;
+      width: ${props.timeLeft}%;
+
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      background: var(--green);
+    }
+  `}
+
+
   &:disabled {
     background: var(--white);
     color: var(--text);
     cursor: not-allowed;
-
-    /* border-bottom: 4px solid var(--green);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0; */
 
     &::after {
       position: relative;
@@ -77,14 +97,18 @@ export const CountdownButton = styled.button<Props>`
 
       content: "";
 
-      width: 100%;
       height: 4px;
+      width: 100%;
 
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
 
       background: var(--green);
     }
+
+    /* border-bottom: 4px solid var(--green);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0; */
   }
 
   ${({ active }) =>
@@ -96,6 +120,12 @@ export const CountdownButton = styled.button<Props>`
           &:hover:not(:disabled) {
             color: var(--white);
             background: var(--red);
+
+            &::after {
+              content: '';
+
+              display: none;
+            }
           }
         `
       : css`

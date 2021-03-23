@@ -29,6 +29,15 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env
+.env.development
 
 # vercel
 .vercel
+
+rsa.private
+
+package-lock.json
+
+# Local Netlify folder
+.netlify

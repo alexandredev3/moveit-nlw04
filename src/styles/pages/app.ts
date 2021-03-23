@@ -1,5 +1,15 @@
 import styled from "styled-components";
 
+export const ContainerHome = styled.div`
+  display: flex;
+
+  .home__button {
+    path {
+      stroke: var(--blue);
+    }
+  }
+`;
+
 export const Container = styled.div`
   max-width: 992px;
   height: 100vh;

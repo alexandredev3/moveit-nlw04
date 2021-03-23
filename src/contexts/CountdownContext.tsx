@@ -1,12 +1,18 @@
 import { createContext, ReactNode, useEffect, useState, useContext } from "react";
+import { useSession } from 'next-auth/client';
+import { api } from "services/api";
 
 import { useChallenge } from '../contexts/ChallengeContext';
+
+import { useToast } from '../contexts/ToastContext';
 
 interface ICountdownContextData {
   minutes: number;
   seconds: number;
   hasTimeFinished: boolean;
   isActive: boolean;
+  startTime: number;
+  time: number;
   startCountdown: () => void;
   resetCountdown: () => void;
 }
@@ -21,10 +27,12 @@ let countdownTimeout: NodeJS.Timeout;
 
 export function CountdownProvider({ children }: ICountdownProviderProps) {
   const { startNewChallenge } = useChallenge(); 
+  const { showToast } = useToast();
 
   // 25 minutos representado em segundos.
-  const startTime = 25 * 60
+  const startTime = 1 * 60
 
+  const [session] = useSession();
   const [time, setTime] = useState(startTime);
   const [isActive, setIsActive] = useState(false);
   const [hasTimeFinished, setHasTimeFinished] = useState(false);
@@ -46,8 +54,20 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
     }
   }, [isActive, time]);
 
-  function startCountdown() {
-    return setIsActive(true);
+  async function startCountdown() {
+    try {
+      if (session) {
+        await api.post('/countdown/startCountdown');
+      }
+      setIsActive(true);
+    } catch(err) {
+      setIsActive(false);
+      showToast({
+        type: 'error',
+        title: 'Erro',
+        description: 'Ocorreu um erro ao iniciar a contagem regressiva, tente novamente...',
+      })
+    }
   }
 
   function resetCountdown() {
@@ -65,6 +85,8 @@ export function CountdownProvider({ children }: ICountdownProviderProps) {
           seconds,
           hasTimeFinished,
           isActive,
+          startTime,
+          time,
           startCountdown,
           resetCountdown,
         }

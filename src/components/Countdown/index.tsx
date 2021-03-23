@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useCountdown } from '../../contexts/CountdownContext';
 
 import { CountdownContainer, CountdownButton } from './styles';
@@ -9,12 +9,16 @@ export function Countdown() {
     seconds, 
     hasTimeFinished, 
     isActive, 
+    startTime,
+    time,
     resetCountdown, 
-    startCountdown 
+    startCountdown
   } = useCountdown();
 
   const [minuteLeft, minuteRight] = String(minutes).padStart(2, '0').split('');
   const [secondLeft, secondRight] = String(seconds).padStart(2, '0').split('');
+
+  const timeLeft = Math.round((time * 100) / startTime);
 
   return (
     <div>
@@ -39,12 +43,20 @@ export function Countdown() {
             Ciclo encerrado
         </CountdownButton>
       ) : (
-        <>
+        <motion.div
+          whileTap={{
+            scale: 1,
+          }}
+          whileHover={{
+            scale: 1.03,
+          }}
+        >
           {isActive ? (
             <CountdownButton 
               type="button" 
               onClick={resetCountdown} 
               active={isActive}
+              timeLeft={timeLeft}
             >
               Abandonar ciclo
             </CountdownButton>
@@ -57,7 +69,7 @@ export function Countdown() {
               Iniciar um ciclo
             </CountdownButton>
           )}
-        </>
+        </motion.div>
       )}
     </div>
   );
