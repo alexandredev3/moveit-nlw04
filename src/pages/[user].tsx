@@ -83,7 +83,7 @@ function Home({
                 <Profile 
                   name={session.user.name}
                   imgUrl={session.user.image}
-                />
+                /> 
                 <CompletedChallenges />
                 <Countdown />
               </div>

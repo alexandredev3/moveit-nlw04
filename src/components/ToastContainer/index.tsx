@@ -15,28 +15,10 @@ export function ToastContainer({ messages }: IToastContainerProps) {
     <Container>
       {messages.map((message) => {
         return (
-          <motion.div 
-            style={{ marginBottom: 12 }}
-            transition={{
-              type: 'spring',
-              duration: 0.4,
-              bounce: 0.25
-            }}
-            variants={{
-              hide: {
-                x: "40vw",
-                opacity: 0,
-              },
-              show: {
-                x: 0,
-                opacity: 1,
-              }
-            }}
-            initial="hide"
-            animate="show"
-          >
-            <Toast key={message.id} message={message} />
-          </motion.div>
+          <Toast 
+            key={message.id} 
+            message={message} 
+          />
         );
       })}
     </Container>

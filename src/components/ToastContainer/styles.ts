@@ -6,5 +6,7 @@ export const Container = styled.div`
   top: 38px;
   right: 38px;
 
+  padding: 30px;
+
   overflow: hidden;
 `;
