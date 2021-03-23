@@ -36,10 +36,7 @@ interface IChallengeProviderProps {
 export const ChallengeContext = createContext<IChallengeContextData>({} as IChallengeContextData);
 
 export function ChallengeProvider({ children, ...rest }: IChallengeProviderProps) {
-<<<<<<< HEAD
-=======
   const [session, loading] = useSession();
->>>>>>> moveit2.0
   const [level, setLevel] = useState(rest.level);
   const [currentExperience, setCurrentExperience] = useState(rest.currentExperience);
   const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted);

@@ -39,7 +39,7 @@ function Home({
     if (isNewUser) {
       showToast({
         type: 'success',
-        title: 'Cadastro feito com sucesso!',
+        title: 'Cadastro realizado com sucesso!',
         description: 
           `Olá ${session.user.name}. Seja bem-vindo ao Move.it! Agora todo o seu progresso será salvo e você pode aparecer no Leaderboard e ficar entre os melhores!`
       });

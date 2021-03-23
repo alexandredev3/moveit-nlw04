@@ -93,16 +93,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-<<<<<<< HEAD
-    props: {
-      level: Number(level ?? 1),
-      currentExperience: Number(currentExperience ?? 0),
-      challengesCompleted: Number(challengesCompleted ?? 0),
-=======
     redirect: {
       destination: `/${session.user.github_profile.username}`,
       permanent: false,
->>>>>>> moveit2.0
     }
   }
 }
