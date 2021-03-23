@@ -11,6 +11,7 @@ import {
   InputBlock,
   Button,
 } from '../styles/pages/signin';
+import { motion } from 'framer-motion';
 
 export default function SignIn() {
   return (
@@ -42,7 +43,17 @@ export default function SignIn() {
               <span>Faça login com seu Github para começar</span>
             </Github>
             <InputBlock>
-              <Button type="button" onClick={() => signIn('github')}>
+              <Button 
+                type="button" 
+                onClick={() => signIn('github')}
+                as={motion.button}
+                whileTap={{
+                  scale: 1,
+                }}
+                whileHover={{
+                  scale: 1.03,
+                }}
+              >
                 <span>Fazer login com Github</span>
                 <img src="/icons/github.svg" alt="Seta para esquerta icon"/>
               </Button>

@@ -109,8 +109,6 @@ export const Button = styled.button`
   border-radius: 5px;
   outline: 1px solid var(--blue);
 
-  transition: background 0.2s;
-
   @media (max-width: 720px) {
     height: 70px;
     padding: 0 1.6rem;
