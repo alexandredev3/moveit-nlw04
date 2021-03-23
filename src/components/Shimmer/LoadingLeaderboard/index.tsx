@@ -33,9 +33,9 @@ export function LoadingLeaderboard() {
                 </th>
               </tr>
             </thead>
-            {iterable.map(() => {
+            {iterable.map((_, index) => {
               return (
-                <tbody>
+                <tbody key={index}>
                   <tr>
                     <td className="position__body">
                       <Skeleton className="position__skeleton" />
