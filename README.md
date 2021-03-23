@@ -47,6 +47,10 @@ Este projeto foi desenvolvido com as seguintes tecnologias
 - [StyledComponents](https://styled-components.com/)
 
 ## :clipboard: Funcionalidades
+- [x] Fazer cadastro pelo o GitHub.
+- [x] Quando o usuário se cadastra um toast é rendelizado dando boas vindas para o novo usuário.
+- [x] Leaderboard.
+- [x] Validação para validar se o usuário completou o tempo necessário para porder completar um desafio, evitando trapaças.
 - [x] Iniciar um ciclo de 25 minutos.
 - [x] Abadornar ciclo.
 - [x] Dispara um efeito sonoro quando o ciclo chega ao fim.
