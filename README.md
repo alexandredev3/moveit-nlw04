@@ -44,6 +44,9 @@ Este projeto foi desenvolvido com as seguintes tecnologias
 - [Next.js](https://nextjs.org/)
 - [React.js](https://pt-br.reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [SWR](https://swr.vercel.app/)
+- [NextAuth](https://next-auth.js.org/)
+- [FramerMotion](https://www.framer.com/motion/)
 - [StyledComponents](https://styled-components.com/)
 
 ## :clipboard: Funcionalidades
