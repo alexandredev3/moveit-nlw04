@@ -36,7 +36,7 @@
 O Move.it é um app que usa a técnica de Pomodoro, esse app faz com que pessoas que passa muito tempo na frente do computador realizar exercícios físicos.
 
 ## :art: Layout
-Você pode acessar o Layout pelo <a href="https://www.figma.com">Figma<a> atravês <a href="https://www.figma.com/file/ge20pu3ofMOKoliUyKx1Nl/Move.it-1.0">desse link<a>.
+Você pode acessar o Layout pelo <a href="https://www.figma.com">Figma<a> atravês <a href="https://www.figma.com/file/ZIzDXbcUgI6b9HRVA9wKYQ/Move.it-2.0">desse link<a>.
 
 ## 🛠 Tecnologias
 Este projeto foi desenvolvido com as seguintes tecnologias
@@ -44,9 +44,16 @@ Este projeto foi desenvolvido com as seguintes tecnologias
 - [Next.js](https://nextjs.org/)
 - [React.js](https://pt-br.reactjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [SWR](https://swr.vercel.app/)
+- [NextAuth](https://next-auth.js.org/)
+- [FramerMotion](https://www.framer.com/motion/)
 - [StyledComponents](https://styled-components.com/)
 
 ## :clipboard: Funcionalidades
+- [x] Fazer cadastro pelo o GitHub.
+- [x] Quando o usuário se cadastra um toast é rendelizado dando boas vindas para o novo usuário.
+- [x] Leaderboard.
+- [x] Validação para validar se o usuário completou o tempo necessário para porder completar um desafio, evitando trapaças.
 - [x] Iniciar um ciclo de 25 minutos.
 - [x] Abadornar ciclo.
 - [x] Dispara um efeito sonoro quando o ciclo chega ao fim.
