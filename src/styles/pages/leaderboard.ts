@@ -3,6 +3,10 @@ import styled from "styled-components";
 export const ContainerLeaderboard = styled.div`
   display: flex;
 
+  .aside {
+    position: fixed;
+  }
+
   .leaderboard__button {
     path {
       stroke: var(--blue);
@@ -29,6 +33,7 @@ export const Container = styled.div`
 export const Header = styled.header`
   > h1 {
     color: var(--title);
+    margin-left: -0.6rem;
   }
 `;
 
@@ -43,6 +48,8 @@ export const Main = styled.main`
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+
+  margin-bottom: 4rem;
 
   thead {
     text-align: left;

@@ -21,7 +21,7 @@ export function Sidebar({ page }: Props) {
   const isSignin = session && !loading;
 
   return (
-    <Aside>
+    <Aside className="aside">
       <img src="/logo.svg" alt="Moveit logo"/>
 
       <Main>

@@ -3,6 +3,10 @@ import styled from "styled-components";
 export const ContainerHome = styled.div`
   display: flex;
 
+  .aside {
+    position: fixed;
+  }
+
   .home__button {
     path {
       stroke: var(--blue);
