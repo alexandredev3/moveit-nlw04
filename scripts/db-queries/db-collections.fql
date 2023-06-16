@@ -1,0 +1,6 @@
+CreateCollection({
+  name: 'users'
+})
+CreateCollection({
+  name: 'countdown_cycles'
+})
