@@ -1,0 +1,21 @@
+CreateIndex({
+  name: 'user_by_provider_account_id',
+  source: Collection("users"),
+  terms: [
+    { field: ["data", "provider_account_id"] }
+  ],
+  unique: true
+})
+CreateIndex({
+  name: 'countdown_cycle_by_user_id',
+    source: Collection("countdown_cycles"),
+  terms: [
+    { field: ["data", "user_id"] }
+  ],
+  unique: true
+})
+CreateIndex({
+  name: "countdown_cycle_by_has_expired",
+  source: Collection("countdown_cycles"),
+  terms: [{ field: ["data", "has_expired"] }]
+})

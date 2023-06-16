@@ -1,110 +1,70 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import Providers from "next-auth/providers";
-import { GenericObject } from "next-auth/client";
-import { NextApiRequest, NextApiResponse } from "next";
-import { ObjectId } from "mongodb";
+import NextAuth from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
+import { query as q } from 'faunadb';
 
-import { connectToDatabase } from '@lib/mongodb';
-import { getUpdateUser } from '../users/getUpdateUser';
+import { faunadbClient, CollectionIndexes } from '@/services/faunadb';
 
-const {
-  GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET,
-  MONGODB_URI,
-  SECRET,
-} = process.env;
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID as string;
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET as string;
+const SECRET = process.env.SECRET;
 
-let username: string;
-
-const options: NextAuthOptions = {
+export default NextAuth({
   providers: [
-    Providers.GitHub({
+    GitHubProvider({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
-      scope: 'public_repo',
-    }),
-  ],
-
-  database: MONGODB_URI,
-  secret: SECRET,
-
-  jwt: {
-    secret: SECRET,
-    encryption: true,
-  },
-
-  session: {
-    jwt: true,
-    maxAge: 30 * 24 * 60 * 60,
-    updateAge: 24 * 60 * 60,
-  },
-
-  events: {
-    createUser: async (message) => {
-      const { db } = await connectToDatabase();
-
-      const usersCollection = db.collection('users');
-
-      usersCollection.updateOne(
-        { _id: new ObjectId(message.id) },
-        {
-          $set: {
-            username,
-            isNewUser: true
-          }
+      authorization: {
+        params: {
+          scope: 'read:user'
         }
-      )
-    }
-  },
-
-  debug: true,
+      },
+    })
+  ],
+  // secret: SECRET,
+  debug: process.env.NODE_ENV === 'development',
   callbacks: {
-    async signIn(user: GenericObject, account: GenericObject, profile: GenericObject) {
-      username = profile.login
+    jwt: async ({ token }) => {
+      return token;
+    },
+    signIn: async ({ user, account }) => {
+      const { provider, providerAccountId } = account as { provider: string; providerAccountId: string; };
+      const { email } = user;
+
+      try {
+        await faunadbClient.query(
+          q.If(
+            q.Not(
+              q.Exists(
+                q.Match(
+                  q.Index(CollectionIndexes.USER_BY_PROVIDER_ACCOUNT_ID),
+                  providerAccountId
+                )
+              )
+            ),
+            q.Create(
+              q.Collection('users'),
+              {
+                data: {
+                  provider_account_id: providerAccountId,
+                  provider_name: provider,
+                  email,
+                }
+              }
+            ),
+            q.Get(
+              q.Match(
+                q.Index(CollectionIndexes.USER_BY_PROVIDER_ACCOUNT_ID),
+                providerAccountId
+              )
+            )
+          ),
+        )
+      } catch (error: any) {
+        console.error(error);
+        throw new Error('Failed to Sign In');
+      }
 
       return true;
-    },
-    async redirect(url: string, _: string) {
-      return Promise.resolve("/");
-    },
-    async session(session: any, user: any) {
-      const { isNewUser } = await getUpdateUser(user.id);
-
-      session.user = {
-        ...user,
-        isNewUser
-      }
-
-      console.log(">>>>>", session)
-
-      return Promise.resolve(session);
-    },
-    async jwt(
-      token: GenericObject, 
-      user: GenericObject, 
-      account: GenericObject, 
-      profile: GenericObject, 
-      isNewUser: boolean,
-    ) {
-      if (user) {
-        token = {
-          ...user,
-          isNewUser,
-        }
-        token.github_profile = {
-          id: profile.id,
-          name: user.name,
-          image: user.image,
-          username: profile.login,
-          followers: profile.followers,
-          following: profile.following,
-        }
-      }
-
-      return Promise.resolve(token);
-    },
+    }
   },
-};
-
-export default (req: NextApiRequest, res: NextApiResponse) =>
-  NextAuth(req, res, options);
+});
